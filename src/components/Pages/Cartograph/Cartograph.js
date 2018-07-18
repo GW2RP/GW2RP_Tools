@@ -8,7 +8,9 @@ class Cartograph extends Component {
 
     this.state = {
       isLoading: true,
-      rumours: []
+      rumours: [],
+      events: [],
+      locations: []
     }
   }
 
@@ -22,7 +24,37 @@ class Cartograph extends Component {
     this.props.rumoursService.getAll().then(rumours => {
       console.log(rumours);
       this.setState({
-        rumours
+        rumours 
+      });
+    }).catch(err => {
+      console.error(err);
+    });
+
+    this.props.eventsService.subscribe(events => {
+      this.setState({
+        events
+      });
+    });
+
+    this.props.eventsService.getAll().then(events => {
+      console.log(events);
+      this.setState({
+        events 
+      });
+    }).catch(err => {
+      console.error(err);
+    });
+
+    this.props.locationsService.subscribe(locations => {
+      this.setState({
+        locations
+      });
+    });
+
+    this.props.locationsService.getAll().then(locations => {
+      console.log(locations);
+      this.setState({
+        locations 
       });
     }).catch(err => {
       console.error(err);
@@ -31,7 +63,11 @@ class Cartograph extends Component {
 
   render() {
     return (
-      <Map rumours={this.state.rumours} />
+      <Map
+        rumours={this.state.rumours}
+        events={this.state.events}
+        locations={this.state.locations}
+        />
     );
   }
 

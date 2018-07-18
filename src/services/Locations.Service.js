@@ -2,10 +2,10 @@ import Axios from 'axios';
 
 import { API_URL } from '../configuration/Config';
 
-class RumoursService {
+class LocationsService {
 
     constructor() {
-        this.rumours = null;
+        this.locations = null;
         this.observers = [];
     }
 
@@ -14,13 +14,13 @@ class RumoursService {
     }
 
     dispatch = () => {
-        this.observers.forEach(observer => observer(this.rumours));
+        this.observers.forEach(observer => observer(this.locations));
     }
 
     getAll = () => {
         return Promise.resolve().then(() => {
-            if (this.rumours) {
-                return this.rumours;
+            if (this.locations) {
+                return this.locations;
             }
 
             return this.fetchAll();
@@ -28,22 +28,22 @@ class RumoursService {
     }
 
     fetchAll = () => {
-        console.log("Fetching rumours...")
+        console.log("Fetching locations...")
         return Axios({
             method: "GET",
             baseURL: API_URL,
-            url: '/rumours'
+            url: '/locations'
         }).then(response => {
-            console.log(response.data.rumours.length + " rumours fetched.");
-            // Parsing rumours.
+            console.log(response.data.locations.length + " locations fetched.");
+            // Parsing locations.
 
-            return response.data.rumours.map(r => {
+            return response.data.locations.map(r => {
                 const coord = r.coord.substr(1, r.coord.length - 2).split(",");
                 r.coord = coord;
                 return r;
             });
         }).catch(err => {
-            console.log("Could not fetch rumours.")
+            console.log("Could not fetch locations.")
             console.error(err);
             throw err;
         });
@@ -51,4 +51,4 @@ class RumoursService {
 
 }
 
-export default new RumoursService();
+export default new LocationsService();

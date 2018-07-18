@@ -13,6 +13,8 @@ import Cartograph from './components/Pages/Cartograph';
 
 import authService from './services/Auth.Service';
 import rumoursService from './services/Rumours.Service';
+import eventsService from './services/Events.Service';
+import locationsService from './services/Locations.Service';
 
 class App extends Component {
 
@@ -83,7 +85,11 @@ class App extends Component {
           <Switch>
             <Route exact path="/" component={Home} />
             <Route path="/carte" render={() => (
-              <Cartograph rumoursService={rumoursService} />
+              <Cartograph
+                rumoursService={rumoursService}
+                eventsService={eventsService}
+                locationsService={locationsService}
+                />
             )} />
             <Route path="/admin" render={() =>
               auth.isAuthenticated ?

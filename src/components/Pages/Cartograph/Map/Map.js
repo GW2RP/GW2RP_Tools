@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 
 import L from 'leaflet';
 
-
 import './Map.css';
 
 class Cartograph extends Component {
@@ -61,19 +60,67 @@ class Cartograph extends Component {
             });
 
             this.props.rumours.forEach(r => {
-                let coord = r.coord.substr(1, r.coord.length - 2).split(",");
-
                 var popupContent = '<h3>' + r.name + '</h3><br>';
                 popupContent += r.text.replace(/\n/g, "<br>");
                 if (r.site.length > 0) {
                     popupContent += '<br><a target="_blank" href="' + r.site + '">site web</a>';
                 }
 
-                let marker = L.marker(this.unproject([coord[0], coord[1]])).bindPopup(popupContent);
+                let marker = L.marker(this.unproject(r.coord)).bindPopup(popupContent);
                 marker.addTo(this.map);
 
                 this.markers.push({
                     category: "rumour",
+                    marker
+                });
+            });
+        }
+
+        if (this.props.events != prevProps.events) {
+            // Update all events marker
+            // (TODO: It would be more optimized to only update the marker that effectively chanded.)
+
+            this.markers.filter(m => m.category === "event").forEach(m => {
+                console.log(m);
+            });
+
+            this.props.events.forEach(r => {
+                var popupContent = '<h3>' + r.title + '</h3><br>';
+                popupContent += r.description.replace(/\n/g, "<br>");
+                if (r.site.length > 0) {
+                    popupContent += '<br><a target="_blank" href="' + r.site + '">site web</a>';
+                }
+
+                let marker = L.marker(this.unproject(r.coord)).bindPopup(popupContent);
+                marker.addTo(this.map);
+
+                this.markers.push({
+                    category: "event",
+                    marker
+                });
+            });
+        }
+
+        if (this.props.locations != prevProps.locations) {
+            // Update all locations marker
+            // (TODO: It would be more optimized to only update the marker that effectively chanded.)
+
+            this.markers.filter(m => m.category === "location").forEach(m => {
+                console.log(m);
+            });
+
+            this.props.locations.forEach(r => {
+                var popupContent = '<h3>' + r.name + '</h3><br>';
+                popupContent += r.description.replace(/\n/g, "<br>");
+                if (r.site.length > 0) {
+                    popupContent += '<br><a target="_blank" href="' + r.site + '">site web</a>';
+                }
+
+                let marker = L.marker(this.unproject(r.coord)).bindPopup(popupContent);
+                marker.addTo(this.map);
+
+                this.markers.push({
+                    category: "location",
                     marker
                 });
             });
