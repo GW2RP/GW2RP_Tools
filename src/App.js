@@ -12,6 +12,7 @@ import Home from './components/Pages/Home';
 import Cartograph from './components/Pages/Cartograph';
 
 import authService from './services/Auth.Service';
+import rumoursService from './services/Rumours.Service';
 
 class App extends Component {
 
@@ -78,10 +79,12 @@ class App extends Component {
     return (
       <Router>
         <div className="App">
-          <Navigation logOut={this.logOut} user={this.state.user}  />
+          <Navigation logOut={this.logOut} user={this.state.user} />
           <Switch>
             <Route exact path="/" component={Home} />
-            <Route path="/carte" component={Cartograph} />
+            <Route path="/carte" render={() => (
+              <Cartograph rumoursService={rumoursService} />
+            )} />
             <Route path="/admin" render={() =>
               auth.isAuthenticated ?
                 (

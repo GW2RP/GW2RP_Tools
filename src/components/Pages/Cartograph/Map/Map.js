@@ -1,11 +1,17 @@
 import React, { Component } from 'react';
 
 import L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
+
 
 import './Map.css';
 
 class Cartograph extends Component {
+    constructor(props) {
+        super(props);
+
+        this.markers = [];
+    }
+
     componentDidMount() {
         // create map
         this.map = L.map("mapdiv", {
@@ -40,7 +46,42 @@ class Cartograph extends Component {
             }
         });
     }
-    
+
+
+
+    componentDidUpdate(prevProps) {
+        // Update rumours.
+
+        if (this.props.rumours != prevProps.rumours) {
+            // Update all rumours marker
+            // (TODO: It would be more optimized to only update the marker that effectively chanded.)
+
+            this.markers.filter(m => m.category === "rumour").forEach(m => {
+                console.log(m);
+            });
+
+            this.props.rumours.forEach(r => {
+                let coord = r.coord.substr(1, r.coord.length - 2).split(",");
+
+                var popupContent = '<h3>' + r.name + '</h3><br>';
+                popupContent += r.text.replace(/\n/g, "<br>");
+                if (r.site.length > 0) {
+                    popupContent += '<br><a target="_blank" href="' + r.site + '">site web</a>';
+                }
+
+                let marker = L.marker(this.unproject([coord[0], coord[1]])).bindPopup(popupContent);
+                marker.addTo(this.map);
+
+                this.markers.push({
+                    category: "rumour",
+                    marker
+                });
+            });
+        }
+    }
+
+
+
     // Conversion de lattitue/longitude en x/y carrés et vice-versa, override de unproject impl�ment�.
     //   GW2 : NO = [0,0], SE = [continent_xmax,continent_ymax];
     //   Leaflet: NO = [0,0], SE = [-256, 256]
