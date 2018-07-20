@@ -4,6 +4,80 @@ import L from 'leaflet';
 
 import './Map.css';
 
+import rumourIcon from './icons/20px-map-rumor.png';
+import eventIcon from './icons/20px-map-generic.png';
+import tavernIcon from './icons/20px-map-tavern.png';
+import merchantIcon from './icons/20px-map-merchant.png';
+import genericIcon from './icons/20px-map-generic-guild.png';
+import festivalIcon from './icons/20px-map-explorers.png';
+import guildIcon from './icons/20px-map-guild.png';
+import assemblyIcon from './icons/20px-map-community.png';
+import battleIcon from './icons/20px-map-battle.png';
+
+
+let icons = {
+    rumour: L.icon({
+        iconUrl: rumourIcon,
+        iconSize: [20, 20],
+        iconAnchor: [10, 10],
+        popupAnchor: [0, -10]
+    }),
+    generic: L.icon({
+        iconUrl: eventIcon,
+        iconSize: [20, 20],
+        iconAnchor: [10, 10],
+        popupAnchor: [0, -10]
+    }),
+    other: L.icon({
+        iconUrl: genericIcon,
+        iconSize: [20, 20],
+        iconAnchor: [10, 10],
+        popupAnchor: [0, -10]
+    }),
+    tavern: L.icon({
+        iconUrl: tavernIcon,
+        iconSize: [20, 20],
+        iconAnchor: [10, 10],
+        popupAnchor: [0, -15]
+    }),
+    merchant: L.icon({
+        iconUrl: merchantIcon,
+        iconSize: [20, 20],
+        iconAnchor: [10, 10],
+        popupAnchor: [0, -20]
+    }),
+    other: L.icon({
+        iconUrl: genericIcon,
+        iconSize: [20, 20],
+        iconAnchor: [10, 10],
+        popupAnchor: [0, -10]
+    }),
+    festival: L.icon({
+        iconUrl: festivalIcon,
+        iconSize: [20, 20],
+        iconAnchor: [10, 10],
+        popupAnchor: [0, -15]
+    }),
+    guild: L.icon({
+        iconUrl: guildIcon,
+        iconSize: [20, 20],
+        iconAnchor: [10, 10],
+        popupAnchor: [0, -10]
+    }),
+    communitary: L.icon({
+        iconUrl: assemblyIcon,
+        iconSize: [20, 20],
+        iconAnchor: [10, 10],
+        popupAnchor: [0, -15]
+    }),
+    fight: L.icon({
+        iconUrl: battleIcon,
+        iconSize: [20, 20],
+        iconAnchor: [10, 10],
+        popupAnchor: [0, -10]
+    })
+};
+
 class Cartograph extends Component {
     constructor(props) {
         super(props);
@@ -51,7 +125,7 @@ class Cartograph extends Component {
     componentDidUpdate(prevProps) {
         // Update rumours.
 
-        if (this.props.rumours != prevProps.rumours) {
+        if (this.props.rumours !== prevProps.rumours) {
             // Update all rumours marker
             // (TODO: It would be more optimized to only update the marker that effectively chanded.)
 
@@ -65,8 +139,8 @@ class Cartograph extends Component {
                 if (r.site.length > 0) {
                     popupContent += '<br><a target="_blank" href="' + r.site + '">site web</a>';
                 }
-
-                let marker = L.marker(this.unproject(r.coord)).bindPopup(popupContent);
+                
+                let marker = L.marker(this.unproject(r.coord), { icon: icons.rumour }).bindPopup(popupContent);
                 marker.addTo(this.map);
 
                 this.markers.push({
@@ -76,7 +150,7 @@ class Cartograph extends Component {
             });
         }
 
-        if (this.props.events != prevProps.events) {
+        if (this.props.events !== prevProps.events) {
             // Update all events marker
             // (TODO: It would be more optimized to only update the marker that effectively chanded.)
 
@@ -85,13 +159,13 @@ class Cartograph extends Component {
             });
 
             this.props.events.forEach(r => {
-                var popupContent = '<h3>' + r.title + '</h3><br>';
+                var popupContent = '<h3>' + r.name + '</h3><br>';
                 popupContent += r.description.replace(/\n/g, "<br>");
                 if (r.site.length > 0) {
                     popupContent += '<br><a target="_blank" href="' + r.site + '">site web</a>';
                 }
 
-                let marker = L.marker(this.unproject(r.coord)).bindPopup(popupContent);
+                let marker = L.marker(this.unproject(r.coord), { icon: icons[r.icon] }).bindPopup(popupContent);
                 marker.addTo(this.map);
 
                 this.markers.push({
@@ -101,7 +175,7 @@ class Cartograph extends Component {
             });
         }
 
-        if (this.props.locations != prevProps.locations) {
+        if (this.props.locations !== prevProps.locations) {
             // Update all locations marker
             // (TODO: It would be more optimized to only update the marker that effectively chanded.)
 
@@ -116,7 +190,7 @@ class Cartograph extends Component {
                     popupContent += '<br><a target="_blank" href="' + r.site + '">site web</a>';
                 }
 
-                let marker = L.marker(this.unproject(r.coord)).bindPopup(popupContent);
+                let marker = L.marker(this.unproject(r.coord), { icon: icons[r.icon] }).bindPopup(popupContent);
                 marker.addTo(this.map);
 
                 this.markers.push({
