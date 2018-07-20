@@ -31,10 +31,10 @@ class Home extends Component {
             )}
           </ul>
           {
-            this.props.user ?
+            this.props.user && this.props.user.username ?
               <button className="btn btn-outline-light my-2 my-sm-0" onClick={this.props.logOut}>Se déconnecter</button>
               :
-              <button className="btn btn-outline-light my-2 my-sm-0">Se connecter</button>
+              <button className="btn btn-outline-light my-2 my-sm-0" onClick={this.props.logInModal}>Se connecter</button>
           }
         </div>
       </nav>

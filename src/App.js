@@ -11,6 +11,8 @@ import Navigation from './components/Navigation';
 import Home from './components/Pages/Home';
 import Cartograph from './components/Pages/Cartograph';
 
+import LogInModal from './components/Commons/Modals/LoginModal';
+
 import authService from './services/Auth.Service';
 import rumoursService from './services/Rumours.Service';
 import eventsService from './services/Events.Service';
@@ -26,7 +28,8 @@ class App extends Component {
         isAuthenticating: true,
         isAuthenticated: false,
         user: {},
-        token: null
+        token: null,
+        logInModal: false
       }
     };
   }
@@ -60,9 +63,22 @@ class App extends Component {
   onUserAuthentication = (auth = false, token = null, user = {}, admin = false) => {
     this.setState({ auth: { isAuthenticated: auth, user, token, admin } });
   }
+  
+  signIn = (username, password) => {
+    return authService.signIn(username, password).then(token => {
+      this.onUserAuthentication(true, token, { username }, false);
+      return true;
+    });
+  }
 
   logOut = () => {
-    this.onUserAuthentication();
+    authService.signOut().then(() => {
+      this.onUserAuthentication();
+    });
+  }
+
+  toggleLogInModal = () => {
+    this.setState({ logInModal: !this.state.logInModal });
   }
 
   render() {
@@ -81,7 +97,8 @@ class App extends Component {
     return (
       <Router>
         <div className="App">
-          <Navigation logOut={this.logOut} user={this.state.user} />
+          <LogInModal isOpen={this.state.logInModal} toggle={this.toggleLogInModal} signIn={this.signIn}/>
+          <Navigation logOut={this.logOut} logInModal={() => this.toggleLogInModal()} user={auth.user} />
           <Switch>
             <Route exact path="/" component={Home} />
             <Route path="/carte" render={() => (
@@ -89,7 +106,7 @@ class App extends Component {
                 rumoursService={rumoursService}
                 eventsService={eventsService}
                 locationsService={locationsService}
-                />
+              />
             )} />
             <Route path="/admin" render={() =>
               auth.isAuthenticated ?

@@ -22,6 +22,9 @@ class AuthService {
             this.token = token;
         } catch (e) {
             console.error("Invalid token in memory.");
+            this.user_id = null;
+            this.is_admin = null;
+            this.token = null;
         }
     }
     
@@ -39,6 +42,9 @@ class AuthService {
                 password
             }
         }).then(response => {
+            if (!response.data.success) {
+                throw new Error(response.data.message || "Une erreur est survenue.");
+            }
             // Store token in localStorage.
             localStorage.setItem("username", username);
             this.username = username;
@@ -62,8 +68,11 @@ class AuthService {
     }
 
     signOut() {
-        this.setToken(null);
-        localStorage.removeItem("token");
+        return Promise.resolve().then(() => {
+            this.setToken(null);
+            localStorage.removeItem("token");
+            return true;
+        });
     }
 
     checkToken() {
@@ -85,7 +94,9 @@ class AuthService {
                 token
             }
         })
-        .then(res => res.success)
+        .then(res => {
+            return res.data.success
+        })
         .catch(() => false);
     }
 }
