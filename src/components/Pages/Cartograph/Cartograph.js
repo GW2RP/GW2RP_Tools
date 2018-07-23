@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import Map from './Map';
 
+import { NewMarkerModal } from './Modals';
+
 class Cartograph extends Component {
 
   constructor(props) {
@@ -10,7 +12,8 @@ class Cartograph extends Component {
       isLoading: true,
       rumours: [],
       events: [],
-      locations: []
+      locations: [],
+      showNewMarkerModal: false
     }
   }
 
@@ -61,15 +64,32 @@ class Cartograph extends Component {
     });
   }
 
+  toggleNewMarkerModal = (coord) => {
+    this.setState({
+      showNewMarkerModal: !this.state.showNewMarkerModal,
+      newMarker: {
+        coord
+      }
+    });
+  }
+
   render() {
     return (
+      <div>
+      <NewMarkerModal 
+        newMarker={this.state.newMarker}
+        toggle={() => this.toggleNewMarkerModal(null)}
+        isOpen={this.state.showNewMarkerModal}
+      />
       <Map
         rumours={this.state.rumours}
         events={this.state.events}
         locations={this.state.locations}
         isSignedIn={() => this.props.authService.isSignedIn()}
         toggleLogInModal={this.props.toggleLogInModal}
+        toggleNewMarkerModal={this.toggleNewMarkerModal}
         />
+        </div>
     );
   }
 

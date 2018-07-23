@@ -218,9 +218,10 @@ class Cartograph extends Component {
     onMapRightClick = (e) => {
         console.log("Right click.")
         const point = this.map.project(e.latlng, this.map.getMaxZoom());
-        
+        // point.x, point.y
         if (this.props.isSignedIn()) {
             console.log("Add marker");
+            this.props.toggleNewMarkerModal([point.x, point.y]);
         } else {
             console.log("Show loginModal");
             this.props.toggleLogInModal();
