@@ -17,6 +17,11 @@ import authService from './services/Auth.Service';
 import rumoursService from './services/Rumours.Service';
 import eventsService from './services/Events.Service';
 import locationsService from './services/Locations.Service';
+import LocationsService from './services/Locations.Service';
+
+rumoursService.setAuth(authService);
+eventsService.setAuth(authService);
+LocationsService.setAuth(authService);
 
 class App extends Component {
 

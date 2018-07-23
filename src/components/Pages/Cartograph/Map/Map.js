@@ -221,6 +221,7 @@ class Cartograph extends Component {
         // point.x, point.y
         if (this.props.isSignedIn()) {
             console.log("Add marker");
+            console.log(point);
             this.props.toggleNewMarkerModal([point.x, point.y]);
         } else {
             console.log("Show loginModal");

@@ -87,7 +87,9 @@ class NewMarkerModal extends Component {
 
     addMarker = (event) => {
         event.preventDefault();
-        console.log("Add Marker of type " + this.state.tab);
+        const marker = this.state[this.state.tab];
+        marker.coord = `[${this.props.coord[0]},${this.props.coord[1]}]`;
+        this.props.addMarker(this.state.tab, marker);
     }
 
     handleInputChange = (event) => {

@@ -67,10 +67,29 @@ class Cartograph extends Component {
   toggleNewMarkerModal = (coord) => {
     this.setState({
       showNewMarkerModal: !this.state.showNewMarkerModal,
-      newMarker: {
-        coord
-      }
+      coord
     });
+  }
+
+  addMarker = (type, marker) => {
+    console.log("Add marker of type " + type);
+    switch (type) {
+      case "rumor":
+        this.props.rumoursService.create(marker).then(created => {
+          console.log("Created");
+          console.log(created);
+        }).catch(err => {
+          console.error(err);
+        });
+        break;
+      case "event":
+        break;
+      case "location":
+        break;
+      default:
+        break;
+    }
+    console.log(marker);
   }
 
   render() {
@@ -80,6 +99,8 @@ class Cartograph extends Component {
         newMarker={this.state.newMarker}
         toggle={() => this.toggleNewMarkerModal(null)}
         isOpen={this.state.showNewMarkerModal}
+        coord={this.state.coord}
+        addMarker={this.addMarker}
       />
       <Map
         rumours={this.state.rumours}

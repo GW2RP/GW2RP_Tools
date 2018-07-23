@@ -9,6 +9,10 @@ class EventsService {
         this.observers = [];
     }
 
+    setAuth(authService) {
+        this.authService = authService;
+    }
+
     subscribe(update) {
         this.observers.push(update);
     }

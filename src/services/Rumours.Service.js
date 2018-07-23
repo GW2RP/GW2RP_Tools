@@ -9,6 +9,10 @@ class RumoursService {
         this.observers = [];
     }
 
+    setAuth(authService) {
+        this.authService = authService;
+    }
+
     subscribe(update) {
         this.observers.push(update);
     }
@@ -49,6 +53,30 @@ class RumoursService {
         });
     }
 
+    create = (rumor) => {
+        console.log(rumor);
+        return Axios({
+            method: "POST",
+            baseURL: API_URL,
+            url: '/rumours',
+            data: {
+                name: rumor.title,
+                text: rumor.text,
+                contact: rumor.contact,
+                coord: rumor.coord,
+                category: rumor.category,
+                site: rumor.site,
+                token: this.authService.getToken()
+            }
+        }).then(res => {
+            if (res.data.success) {
+                return res.data.rumours;
+            }
+            throw { message: res.data.message ? res.data.message.message : "An error occured." };
+        }).catch(err => {
+            throw err;
+        })
+    }
 }
 
 export default new RumoursService();
