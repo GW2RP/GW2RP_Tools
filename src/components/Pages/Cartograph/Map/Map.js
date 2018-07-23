@@ -118,9 +118,10 @@ class Cartograph extends Component {
                 tile.style.height = tileSize.y + 1 + 'px';
             }
         });
+
+        this.map.on('click', this.onMapClick);
+        this.map.on('contextmenu', this.onMapRightClick)
     }
-
-
 
     componentDidUpdate(prevProps) {
         // Update rumours.
@@ -201,13 +202,31 @@ class Cartograph extends Component {
         }
     }
 
-
-
     // Conversion de lattitue/longitude en x/y carrés et vice-versa, override de unproject impl�ment�.
     //   GW2 : NO = [0,0], SE = [continent_xmax,continent_ymax];
     //   Leaflet: NO = [0,0], SE = [-256, 256]
     unproject(coord) {
         return this.map.unproject(coord, this.map.getMaxZoom());
+    }
+
+    onMapClick = (e) => {
+        console.log("Left Click.")
+        // Close Sidebar.
+        return false;
+    }
+
+    onMapRightClick = (e) => {
+        console.log("Right click.")
+        const point = this.map.project(e.latlng, this.map.getMaxZoom());
+        
+        if (this.props.isSignedIn()) {
+            console.log("Add marker");
+        } else {
+            console.log("Show loginModal");
+            this.props.toggleLogInModal();
+        }
+
+        return false;
     }
 
     render() {

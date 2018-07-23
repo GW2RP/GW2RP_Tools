@@ -67,6 +67,8 @@ class Cartograph extends Component {
         rumours={this.state.rumours}
         events={this.state.events}
         locations={this.state.locations}
+        isSignedIn={() => this.props.authService.isSignedIn()}
+        toggleLogInModal={this.props.toggleLogInModal}
         />
     );
   }

@@ -67,10 +67,17 @@ class AuthService {
         });
     }
 
+    isSignedIn() {
+        return this.token && this.username;
+    }
+
     signOut() {
         return Promise.resolve().then(() => {
             this.setToken(null);
             localStorage.removeItem("token");
+            if (this.listener) {
+                this.listener();
+            }
             return true;
         });
     }
@@ -98,6 +105,14 @@ class AuthService {
             return res.data.success
         })
         .catch(() => false);
+    }
+
+    onLogOut(listener) {
+        if (listener) {
+            this.listener = listener;
+        } else {
+            this.listener = null;
+        }
     }
 }
 

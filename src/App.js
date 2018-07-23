@@ -52,12 +52,15 @@ class App extends Component {
             }
           });
         } else {
+          authService.setToken(null);
           this.setState({ auth: { isAuthenticating: false } });
         }
       });
     } else {
       this.setState({ auth: { isAuthenticating: false } });
     }
+
+    authService.onLogOut(() => this.onUserAuthentication());
   }
 
   onUserAuthentication = (auth = false, token = null, user = {}, admin = false) => {
@@ -106,6 +109,8 @@ class App extends Component {
                 rumoursService={rumoursService}
                 eventsService={eventsService}
                 locationsService={locationsService}
+                authService={authService}
+                toggleLogInModal={this.toggleLogInModal}
               />
             )} />
             <Route path="/admin" render={() =>
