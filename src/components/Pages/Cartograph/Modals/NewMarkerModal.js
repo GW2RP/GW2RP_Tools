@@ -48,9 +48,32 @@ class NewMarkerModal extends Component {
 
         this.state = {
             tab: 'location',
-            event: {},
-            location: {},
-            rumor: {}
+            location: {
+                name: "",
+                type: [],
+                contact: "",
+                hours: "",
+                description: "",
+                site: "",
+                icon: ""
+            },
+            event: {
+                name: "",
+                type: [],
+                difficulty: "normal",
+                contact: "",
+                end_date: "",
+                end_hour: "",
+                description: "",
+                site: "",
+                icon: ""
+            },
+            rumor: {
+                title: "",
+                contact: "",
+                text: "",
+                site: ""
+            }
         }
     }
 
@@ -65,6 +88,30 @@ class NewMarkerModal extends Component {
     addMarker = (event) => {
         event.preventDefault();
         console.log("Add Marker of type " + this.state.tab);
+    }
+
+    handleInputChange = (event) => {
+        const target = event.target;
+        let value;
+        switch (target.type) {
+            case "checkbox":
+                value = target.checked;
+                break;
+            case "select-multiple":
+                value = [...target.options].filter(o => o.selected).map(o => o.value)
+                break;
+            default:
+                value = target.value;
+                break;
+        }
+        const name = target.name;
+
+        let obj = this.state[this.state.tab];
+        obj[name] = value;
+
+        this.setState({
+            [this.state.tab]: obj
+        });
     }
 
     render() {
@@ -105,11 +152,11 @@ class NewMarkerModal extends Component {
                                 <Form onSubmit={this.addMarker}>
                                     <FormGroup>
                                         <Label for="name">Nom du Lieu</Label>
-                                        <Input type="text" id="name" placeholder="Grande Cathédrale D'Abaddon" required />
+                                        <Input type="text" name="name" value={this.state.location.name} onChange={this.handleInputChange} placeholder="Grande Cathédrale D'Abaddon" required />
                                     </FormGroup>
                                     <FormGroup>
                                         <Label for="type">Type</Label>
-                                        <Input type="select" id="type" multiple required>
+                                        <Input type="select" name="type" multiple value={this.state.location.type} onChange={this.handleInputChange} required>
                                             <option value="tavern">Taverne</option>
                                             <option value="trading">Commerce</option>
                                             <option value="exploration">Exploration</option>
@@ -121,23 +168,23 @@ class NewMarkerModal extends Component {
                                     </FormGroup>
                                     <FormGroup>
                                         <Label for="contact">Personne à contacter</Label>
-                                        <Input type="text" id="contact" placeholder="Abaddon.6666" required />
+                                        <Input type="text" name="contact" placeholder="Abaddon.6666" value={this.state.location.contact} onChange={this.handleInputChange} required />
                                     </FormGroup>
                                     <FormGroup>
                                         <Label for="hours">Horaires d'Activité</Label>
-                                        <Input type="text" id="hours" placeholder="Tous les jours 20h-22h" required />
+                                        <Input type="text" name="hours" placeholder="Tous les jours 20h-22h" value={this.state.location.hours} onChange={this.handleInputChange} required />
                                     </FormGroup>
                                     <FormGroup>
                                         <Label for="description">Description.</Label>
-                                        <Input type="textarea" name="description" id="description" required />
+                                        <Input type="textarea" name="description" value={this.state.location.description} onChange={this.handleInputChange} required />
                                     </FormGroup>
                                     <FormGroup>
                                         <Label for="site">Site web</Label>
-                                        <Input type="text" id="site" placeholder="http://monforum.gw2rp-tools.ovh/la-cathedrale-abaddon" required />
+                                        <Input type="text" name="site" placeholder="http://monforum.gw2rp-tools.ovh/la-cathedrale-abaddon" value={this.state.location.site} onChange={this.handleInputChange} />
                                     </FormGroup>
                                     <FormGroup>
                                         <Label for="icon">Icone</Label>
-                                        <Input type="select" id="icon" required>
+                                        <Input type="select" name="icon" value={this.state.location.icon} onChange={this.handleInputChange} required>
                                             <option value="tavern">Taverne</option>
                                             <option value="guild">Guilde</option>
                                             <option value="merchant">Commerce</option>
@@ -159,22 +206,22 @@ class NewMarkerModal extends Component {
                                 <Form onSubmit={this.addMarker}>
                                     <FormGroup>
                                         <Label for="name">Titre de l'évènement</Label>
-                                        <Input type="text" id="name" placeholder="Attaque de Centaures" required />
+                                        <Input type="text" name="name" placeholder="Attaque de Centaures" value={this.state.event.name} onChange={this.handleInputChange} required />
                                     </FormGroup>
                                     <FormGroup>
                                         <Label for="difficulty">Difficulté</Label>
-                                        <Input type="select" id="difficulty" required>
+                                        <Input type="select" name="difficulty" value={this.state.event.difficulty} onChange={this.handleInputChange} required>
                                             {Object.values(difficulties).map(difficulty => {
                                                 return <option value={difficulty.id} key={difficulty.id}>{difficulty.name}</option>
                                             })}
                                         </Input>
                                         {event && event.difficulty &&
-                                            <p>{difficulties[event.difficulty].name} : {difficulties[event.difficulty].description}</p>
+                                            <p style={{ color: difficulties[event.difficulty].color }}>{difficulties[event.difficulty].name} : {difficulties[event.difficulty].description}</p>
                                         }
                                     </FormGroup>
                                     <FormGroup>
                                         <Label for="type">Type</Label>
-                                        <Input type="select" id="type" multiple required>
+                                        <Input type="select" name="type" multiple value={this.state.event.type} onChange={this.handleInputChange} required>
                                             <option value="battle">Bataille</option>
                                             <option value="camp">Campement</option>
                                             <option value="communitary">Communautaire</option>
@@ -185,30 +232,30 @@ class NewMarkerModal extends Component {
                                     </FormGroup>
                                     <FormGroup>
                                         <Label for="contact">Personne à contacter</Label>
-                                        <Input type="text" id="contact" placeholder="Abaddon.6666" required />
+                                        <Input type="text" name="contact" placeholder="Abaddon.6666" value={this.state.event.contact} onChange={this.handleInputChange} required />
                                     </FormGroup>
                                     <FormGroup>
                                         <Label for="end_date">Date (ou date de fin)</Label>
-                                        <Input type="date" name="end_date" id="end_date" required />
+                                        <Input type="date" name="end_date" value={this.state.event.end_date} onChange={this.handleInputChange} required />
                                     </FormGroup>
                                     <FormGroup>
                                         <Label for="end_hour">Heure</Label>
-                                        <Input type="time" name="end_hour" id="end_hour" required />
+                                        <Input type="time" name="end_hour" value={this.state.event.end_hour} onChange={this.handleInputChange} required />
                                     </FormGroup>
                                     <FormGroup>
                                         <Label for="description">Description</Label>
-                                        <Input type="textarea" rows="8" name="description" id="description" placeholder="Des centaures attaquent la Garnison de Kryte, les Séraphins recherchent de l'aide auprès de braves mercenaires." required />
+                                        <Input type="textarea" rows="8" name="description" placeholder="Des centaures attaquent la Garnison de Kryte, les Séraphins recherchent de l'aide auprès de braves mercenaires." value={this.state.event.description} onChange={this.handleInputChange} required />
                                         <FormText color="muted">
-                                            Vous pouvez utiliser les balises de mise en forme. 
+                                            Vous pouvez utiliser les balises de mise en forme.
                                         </FormText>
                                     </FormGroup>
                                     <FormGroup>
                                         <Label for="site">Page de l'évenement</Label>
-                                        <Input type="text" id="site" placeholder="http://monforum.gw2rp-tools.ovh/events/une-attaque-centaure" />
+                                        <Input type="text" name="site" placeholder="http://monforum.gw2rp-tools.ovh/events/une-attaque-centaure" value={this.state.event.site} onChange={this.handleInputChange} />
                                     </FormGroup>
                                     <FormGroup>
                                         <Label for="icon">Icone</Label>
-                                        <Input type="select" id="icon">
+                                        <Input type="select" name="icon" value={this.state.event.icon} onChange={this.handleInputChange} >
                                             <option value="generic">Générique</option>
                                             <option value="communitary">Communautaire</option>
                                             <option value="festival">Festivité</option>
@@ -225,11 +272,36 @@ class NewMarkerModal extends Component {
                             </div>
                         </TabPane>
                         <TabPane tabId="rumor">
-                            <Row>
-                                <Col sm="12">
-                                    <h4>Ajouter rumeur</h4>
-                                </Col>
-                            </Row>
+                            <div className="container mt-2">
+                                <p className="text-info">Les rumeurs restent pour une durée de sept jours avant d'être supprimées automatiquement, à moins qu'elles ne soient mises à jour ou prolongée entre temps.</p>
+                                <Form onSubmit={this.addMarker}>
+                                    <FormGroup>
+                                        <Label for="title">Titre de la Rumeur</Label>
+                                        <Input type="text" name="title" placeholder="Un nouveau culte ?" value={this.state.rumor.title} onChange={this.handleInputChange} required />
+                                    </FormGroup>
+                                    <FormGroup>
+                                        <Label for="contact">Personne à contacter</Label>
+                                        <Input type="text" name="contact" placeholder="Abaddon.6666" value={this.state.rumor.contact} onChange={this.handleInputChange} required />
+                                    </FormGroup>
+                                    <FormGroup>
+                                        <Label for="text">Description</Label>
+                                        <Input type="textarea" rows="8" name="text" placeholder="Des centaures attaquent la Garnison de Kryte, les Séraphins recherchent de l'aide auprès de braves mercenaires." value={this.state.rumor.description} onChange={this.handleInputChange} required />
+                                        <FormText color="muted">
+                                            Vous pouvez utiliser les balises de mise en forme.
+                                        </FormText>
+                                    </FormGroup>
+                                    <FormGroup>
+                                        <Label for="site">Page de la rumeur</Label>
+                                        <Input type="text" name="site" placeholder="http://monforum.gw2rp-tools.ovh/rumor/un-nouveau-culte" value={this.state.rumor.site} onChange={this.handleInputChange} />
+                                    </FormGroup>
+                                    <div className="clearfix">
+                                        <div className="float-right">
+                                            <Button type="submit" color="primary">Ajouter</Button>
+                                            <Button className="ml-2" type="button" color="secondary">Annuler</Button>
+                                        </div>
+                                    </div>
+                                </Form>
+                            </div>
                         </TabPane>
                     </TabContent>
                 </ModalBody>
