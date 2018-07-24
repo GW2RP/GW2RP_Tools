@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Map from './Map';
 
 import { NewMarkerModal } from './Modals';
+import { SideBar } from './SideBar';
 
 class Cartograph extends Component {
 
@@ -13,7 +14,8 @@ class Cartograph extends Component {
       rumours: [],
       events: [],
       locations: [],
-      showNewMarkerModal: false
+      showNewMarkerModal: false,
+      sideBar: false
     }
   }
 
@@ -92,25 +94,42 @@ class Cartograph extends Component {
     console.log(marker);
   }
 
+  showSideBar = (sideBarElement) => {
+    this.setState({
+      sideBarElement,
+      sideBar: true
+    });
+  }
+
+  hideSideBar = () => {
+    this.setState({
+      sideBarElement: null,
+      sideBar: false
+    });
+  }
+
   render() {
     return (
       <div>
-      <NewMarkerModal 
-        newMarker={this.state.newMarker}
-        toggle={() => this.toggleNewMarkerModal(null)}
-        isOpen={this.state.showNewMarkerModal}
-        coord={this.state.coord}
-        addMarker={this.addMarker}
-      />
-      <Map
-        rumours={this.state.rumours}
-        events={this.state.events}
-        locations={this.state.locations}
-        isSignedIn={() => this.props.authService.isSignedIn()}
-        toggleLogInModal={this.props.toggleLogInModal}
-        toggleNewMarkerModal={this.toggleNewMarkerModal}
+        <NewMarkerModal 
+          newMarker={this.state.newMarker}
+          toggle={() => this.toggleNewMarkerModal(null)}
+          isOpen={this.state.showNewMarkerModal}
+          coord={this.state.coord}
+          addMarker={this.addMarker}
         />
-        </div>
+        <SideBar isOpen={this.state.sideBar} element={this.state.sideBarElement} />
+        <Map
+          rumours={this.state.rumours}
+          events={this.state.events}
+          locations={this.state.locations}
+          isSignedIn={() => this.props.authService.isSignedIn()}
+          toggleLogInModal={this.props.toggleLogInModal}
+          toggleNewMarkerModal={this.toggleNewMarkerModal}
+          showSideBar={this.showSideBar}
+          hideSideBar={this.hideSideBar}
+          />
+      </div>
     );
   }
 

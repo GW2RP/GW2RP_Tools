@@ -102,7 +102,7 @@ class Cartograph extends Component {
         // Restrict the area which can be panned to
         //  In this case we're using the coordinates for the continent of tyria from "https://api.guildwars2.com/v2/continents/1"
         var continent_dims = [49152, 49152];
-        this.map.setMaxBounds(new L.LatLngBounds(this.unproject([0, 0]), this.unproject(continent_dims))); // northwest, southeast
+        this.map.setMaxBounds(new L.LatLngBounds(this.unproject([-5000, -5000]), this.unproject(continent_dims.map(d => d + 1000)))); // northwest, southeast
 
         // Set the default viewport position (in this case the midpoint) and zoom (in this case 2)
         this.map.setView(this.unproject([(continent_dims[0] / 2), (continent_dims[1] / 2)]), 3);
@@ -142,6 +142,9 @@ class Cartograph extends Component {
                 }
                 
                 let marker = L.marker(this.unproject(r.coord), { icon: icons.rumour }).bindPopup(popupContent);
+                marker.on('click', (e) => {
+                    this.props.showSideBar(r);
+                });
                 marker.addTo(this.map);
 
                 this.markers.push({
@@ -167,6 +170,9 @@ class Cartograph extends Component {
                 }
 
                 let marker = L.marker(this.unproject(r.coord), { icon: icons[r.icon] }).bindPopup(popupContent);
+                marker.on('click', (e) => {
+                    this.props.showSideBar(r);
+                });
                 marker.addTo(this.map);
 
                 this.markers.push({
@@ -192,6 +198,9 @@ class Cartograph extends Component {
                 }
 
                 let marker = L.marker(this.unproject(r.coord), { icon: icons[r.icon] }).bindPopup(popupContent);
+                marker.on('click', (e) => {
+                    this.props.showSideBar(r);
+                });
                 marker.addTo(this.map);
 
                 this.markers.push({
@@ -210,13 +219,19 @@ class Cartograph extends Component {
     }
 
     onMapClick = (e) => {
-        console.log("Left Click.")
+        console.log("Left Click.");
+        
         // Close Sidebar.
+        this.props.hideSideBar();
+        
         return false;
     }
 
     onMapRightClick = (e) => {
-        console.log("Right click.")
+        console.log("Right click.");
+        
+        this.props.hideSideBar();
+
         const point = this.map.project(e.latlng, this.map.getMaxZoom());
         // point.x, point.y
         if (this.props.isSignedIn()) {

@@ -1,0 +1,36 @@
+.sideBar {
+    position: fixed;
+    z-index: 1000;
+    height: 100vh;
+    background-color: burlywood;
+    -webkit-transition: min-width 0.5s, width 0.5s; /* Safari */
+    transition: min-width 0.5s, width 0.5s;
+    transition-timing-function: ease-out;
+    min-width: 0px;
+    width: 0px;
+}
+
+.element {
+    max-height: 90vh;
+}
+
+.sideBar.open {
+    min-width: 300px;
+}
+
+.sideBar .element {
+    background: white;
+}
+
+.area {
+    padding-left: 0.5rem;
+}
+
+.area p {
+    font-size: 0.8rem;
+}
+
+.actions {
+    background: wheat;
+    bottom: 0;
+}
