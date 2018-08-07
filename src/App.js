@@ -108,7 +108,12 @@ class App extends Component {
           <LogInModal isOpen={this.state.logInModal} toggle={this.toggleLogInModal} signIn={this.signIn}/>
           <Navigation logOut={this.logOut} logInModal={() => this.toggleLogInModal()} user={auth.user} />
           <Switch>
-            <Route exact path="/" component={Home} />
+            <Route exact path="/" render={() => (
+              <Home
+                rumoursService={rumoursService}
+                eventsService={eventsService}
+              />
+            )} />
             <Route path="/carte" render={() => (
               <Cartograph
                 rumoursService={rumoursService}
