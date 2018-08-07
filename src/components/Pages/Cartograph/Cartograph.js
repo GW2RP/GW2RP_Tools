@@ -17,52 +17,55 @@ class Cartograph extends Component {
       showNewMarkerModal: false,
       sideBar: false
     }
+
+    this.focus = () => {};
   }
 
   componentDidMount() {
-    this.props.rumoursService.subscribe(rumours => {
-      this.setState({
-        rumours
-      });
-    });
-
-    this.props.rumoursService.getAll().then(rumours => {
-      console.log(rumours);
-      this.setState({
-        rumours 
-      });
-    }).catch(err => {
-      console.error(err);
-    });
-
-    this.props.eventsService.subscribe(events => {
-      this.setState({
-        events
-      });
-    });
-
-    this.props.eventsService.getAll().then(events => {
-      console.log(events);
-      this.setState({
-        events 
-      });
-    }).catch(err => {
-      console.error(err);
-    });
-
-    this.props.locationsService.subscribe(locations => {
-      this.setState({
-        locations
-      });
-    });
-
-    this.props.locationsService.getAll().then(locations => {
-      console.log(locations);
-      this.setState({
-        locations 
-      });
-    }).catch(err => {
-      console.error(err);
+    Promise.all([
+      this.props.rumoursService.getAll().then(rumours => {
+        this.setState({
+          rumours 
+        });
+  
+        this.props.rumoursService.subscribe(rumours => {
+          this.setState({
+            rumours
+          });
+        });
+      }).catch(err => {
+        console.error(err);
+      }),
+      this.props.eventsService.getAll().then(events => {
+        this.setState({
+          events 
+        });
+  
+        this.props.eventsService.subscribe(events => {
+          this.setState({
+            events
+          });
+        });
+      }).catch(err => {
+        console.error(err);
+      }),
+      this.props.locationsService.getAll().then(locations => {
+        this.setState({
+          locations 
+        });
+  
+        this.props.locationsService.subscribe(locations => {
+          this.setState({
+            locations
+          });
+        });
+      }).catch(err => {
+        console.error(err);
+      })
+    ]).then(() => {
+      // Parse URL.
+      const [ first, map, type, id ] = this.props.location.pathname.split("/");
+      this.focus(type, id);
     });
   }
 
@@ -99,6 +102,25 @@ class Cartograph extends Component {
       sideBarElement,
       sideBar: true
     });
+
+    console.log(sideBarElement);
+
+    let type;
+    switch (sideBarElement.category) {
+      case "location":
+        type = "lieu";
+        break;
+      case "rumour":
+        type = "rumeur";
+        break;
+      case "event":
+        type = "event";
+        break;
+      default:
+        return;
+    }
+
+    this.props.history.push(`/carte/${type}/${sideBarElement._id}`);
   }
 
   hideSideBar = () => {
@@ -106,6 +128,10 @@ class Cartograph extends Component {
       sideBarElement: null,
       sideBar: false
     });
+  }
+
+  listenToFocus = (focus) => {
+    this.focus = focus;
   }
 
   render() {
@@ -128,6 +154,7 @@ class Cartograph extends Component {
           toggleNewMarkerModal={this.toggleNewMarkerModal}
           showSideBar={this.showSideBar}
           hideSideBar={this.hideSideBar}
+          listenToFocus={this.listenToFocus}
           />
       </div>
     );

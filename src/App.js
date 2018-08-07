@@ -114,13 +114,15 @@ class App extends Component {
                 eventsService={eventsService}
               />
             )} />
-            <Route path="/carte" render={() => (
+            <Route path="/carte" render={(props) => (
               <Cartograph
                 rumoursService={rumoursService}
                 eventsService={eventsService}
                 locationsService={locationsService}
                 authService={authService}
                 toggleLogInModal={this.toggleLogInModal}
+                location={props.location}
+                history={props.history}
               />
             )} />
             <Route path="/admin" render={() =>

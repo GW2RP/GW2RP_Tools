@@ -90,6 +90,7 @@ class Cartograph extends Component {
         this.map = L.map("mapdiv", {
             minZoom: 2,
             maxZoom: 7,
+            zoomControl: false,
             crs: L.CRS.Simple
         });
 
@@ -119,8 +120,24 @@ class Cartograph extends Component {
             }
         });
 
+        L.control.zoom({
+            position:'topright'
+        }).addTo(this.map);
+
         this.map.on('click', this.onMapClick);
         this.map.on('contextmenu', this.onMapRightClick)
+
+        this.props.listenToFocus((type, id) => {
+            // Search for select marker.
+            let marker = this.markers.find(marker => marker.id === id);
+
+            if (!marker) {
+                return;
+            }
+
+            this.map.setView(Object.values(marker.marker._latlng), 7);
+            this.props.showSideBar(marker.object);
+        });
     }
 
     componentDidUpdate(prevProps) {
@@ -149,6 +166,8 @@ class Cartograph extends Component {
 
                 this.markers.push({
                     category: "rumour",
+                    id: r._id,
+                    object: r,
                     marker
                 });
             });
@@ -177,6 +196,8 @@ class Cartograph extends Component {
 
                 this.markers.push({
                     category: "event",
+                    id: r._id,
+                    object: r,
                     marker
                 });
             });
@@ -205,6 +226,8 @@ class Cartograph extends Component {
 
                 this.markers.push({
                     category: "location",
+                    id: r._id,
+                    object: r,
                     marker
                 });
             });
