@@ -1,36 +1,109 @@
 import React, { Component } from 'react';
-import { Col, Row, Card, CardBody, CardTitle, ListGroup, ListGroupItem } from 'reactstrap';
+import { Link } from 'react-router-dom';
+import { Col, Row, Card, CardBody, CardTitle, ListGroup, ListGroupItem, CardText, CardLink, CardSubtitle } from 'reactstrap';
+
+import Loader from '../../Commons/Loader';
+
+import { formatText } from '../../../utils/formatter';
 
 class Home extends Component {
 
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      rumors: null,
+      events: null,
+    }
+  }
+
   componentDidMount() {
-    this.props.rumoursService.subscribe(rumors => {
-      console.log(rumors);
+    this.props.rumoursService.getAll().then(rumors => {
+      this.setState({ rumors });
+
+      this.props.rumoursService.subscribe((rumors) => {
+        this.setState({ rumors });
+      });
+    }).catch(err => {
+      console.error(err);
     });
 
-    this.props.rumoursService.getAll().catch(err => {
+    this.props.eventsService.getAll().then(events => {
+      this.setState({ events });
+
+      this.props.eventsService.subscribe((events) => {
+        this.setState({ events });
+      });
+    }).catch(err => {
       console.error(err);
     });
   }
 
+  componentWillUnmount() {
+    
+  }
+
   render() {
+    const { rumors, events } = this.state;
+
     return (
       <main role="main" className="container-fluid">
-        <Row className="justify-content-center">
+        <Row className="justify-content-center p-2">
           <Col className="text-center lead">Nous sommes le 66 du Zéphyr.</Col>
         </Row>
-        <Row className="justify-content-center">
-          <Col>
+        <Row className="justify-content-center p-2">
+          <Col sm style={{ maxWidth: "400px" }}>
             <Card>
               <CardBody>
                 <CardTitle>Prochains évènements</CardTitle>
               </CardBody>
+              <CardBody>
+                {events ?
+                  events.slice(0,5).map((event, index) => (
+                    <Card key={index}>
+                      <CardBody>
+                        <CardTitle>{event.name}</CardTitle>
+                        <CardSubtitle>Le {(new Date(event.end_date)).toLocaleString()}</CardSubtitle>
+                      </CardBody>
+                      <CardBody>
+                        <CardText dangerouslySetInnerHTML={{__html: formatText(event.description) }} style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-word", textAlign: "justify", maxHeight: "200px" }}></CardText>
+                        <p className="small">{event.contact}</p>
+                        <Link className="card-link" to={`/carte/event/${event._id}`}>Voir sur la carte.</Link>
+                      </CardBody>
+                    </Card>
+                  ))
+                  :
+                  (
+                    <Loader type="grid" size="20" fill="blue" />
+                  )
+                }
+              </CardBody>
             </Card>
           </Col>
-          <Col>
+          <Col sm style={{ maxWidth: "400px" }}>
             <Card>
               <CardBody>
-                <CardTitle>Les dernières rumeurs</CardTitle>
+                <CardTitle>Dernières rumeurs</CardTitle>
+              </CardBody>
+              <CardBody>
+                {rumors ?
+                  rumors.slice(0,5).map((rumor, index) => (
+                    <Card key={index}>
+                      <CardBody>
+                        <CardTitle>{rumor.name}</CardTitle>
+                      </CardBody>
+                      <CardBody>
+                        <CardText dangerouslySetInnerHTML={{__html: formatText(rumor.text) }} style={{ textOverflow: "ellipsis", wordWrap: "break-word", textAlign: "justify" }}></CardText>
+                        <p className="small">{rumor.contact}</p>
+                        <Link className="card-link" to={`/carte/rumeur/${rumor._id}`}>Voir sur la carte.</Link>
+                      </CardBody>
+                    </Card>
+                  ))
+                  :
+                  (
+                    <Loader type="grid" size="20" fill="blue" />
+                  )
+                }
               </CardBody>
             </Card>
           </Col>

@@ -17,6 +17,10 @@ class RumoursService {
         this.observers.push(update);
     }
 
+    unsubscribe(update) {
+        this.observers.remove(update);
+    }
+
     dispatch = () => {
         this.observers.forEach(observer => observer(this.rumours));
     }
@@ -41,11 +45,14 @@ class RumoursService {
             console.log(response.data.rumours.length + " rumours fetched.");
             // Parsing rumours.
 
-            return response.data.rumours.map(r => {
+            this.rumours = response.data.rumours.map(r => {
                 const coord = r.coord.substr(1, r.coord.length - 2).split(",");
                 r.coord = coord;
                 return r;
             });
+
+            this.dispatch();
+            return this.rumours;
         }).catch(err => {
             console.log("Could not fetch rumours.")
             console.error(err);
