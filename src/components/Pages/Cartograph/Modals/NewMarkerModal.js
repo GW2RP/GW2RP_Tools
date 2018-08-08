@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {
+    Alert,
     Modal, ModalHeader, ModalBody,
     Nav, NavItem, NavLink, TabContent, TabPane,
     Row, Col,
@@ -193,6 +194,11 @@ class NewMarkerModal extends Component {
                                             <option value="other">Divers</option>
                                         </Input>
                                     </FormGroup>
+                                    {this.props.error &&
+                                        <Alert color='danger'>
+                                            {this.props.error}
+                                        </Alert>
+                                    }
                                     <div className="clearfix">
                                         <div className="float-right">
                                             <Button type="submit" color="primary">Ajouter</Button>
@@ -264,6 +270,11 @@ class NewMarkerModal extends Component {
                                             <option value="fight">Combat</option>
                                         </Input>
                                     </FormGroup>
+                                    {this.props.error &&
+                                        <Alert color='danger'>
+                                            {this.props.error}
+                                        </Alert>
+                                    }
                                     <div className="clearfix">
                                         <div className="float-right">
                                             <Button type="submit" color="primary">Ajouter</Button>
@@ -296,6 +307,11 @@ class NewMarkerModal extends Component {
                                         <Label for="site">Page de la rumeur</Label>
                                         <Input type="text" name="site" placeholder="http://monforum.gw2rp-tools.ovh/rumor/un-nouveau-culte" value={this.state.rumor.site} onChange={this.handleInputChange} />
                                     </FormGroup>
+                                    {this.props.error &&
+                                        <Alert color='danger'>
+                                            {this.props.error}
+                                        </Alert>
+                                    }
                                     <div className="clearfix">
                                         <div className="float-right">
                                             <Button type="submit" color="primary">Ajouter</Button>

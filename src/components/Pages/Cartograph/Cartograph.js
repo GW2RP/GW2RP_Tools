@@ -15,6 +15,7 @@ class Cartograph extends Component {
       events: [],
       locations: [],
       showNewMarkerModal: false,
+      newMarkerError: null,
       sideBar: false
     }
 
@@ -81,15 +82,25 @@ class Cartograph extends Component {
     switch (type) {
       case "rumor":
         this.props.rumoursService.create(marker).then(created => {
-          console.log("Created");
-          console.log(created);
+          this.toggleNewMarkerModal(null)
         }).catch(err => {
           console.error(err);
+          this.setState({
+            newMarkerError: err.message
+          });
         });
         break;
       case "event":
         break;
       case "location":
+        this.props.locationsService.create(marker).then(created => {
+          this.toggleNewMarkerModal(null)
+        }).catch(err => {
+          console.error(err);
+          this.setState({
+            newMarkerError: err.message
+          });
+        });
         break;
       default:
         break;
@@ -140,6 +151,7 @@ class Cartograph extends Component {
         <NewMarkerModal 
           newMarker={this.state.newMarker}
           toggle={() => this.toggleNewMarkerModal(null)}
+          error={this.state.newMarkerError}
           isOpen={this.state.showNewMarkerModal}
           coord={this.state.coord}
           addMarker={this.addMarker}

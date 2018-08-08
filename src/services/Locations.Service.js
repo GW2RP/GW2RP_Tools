@@ -17,6 +17,13 @@ class LocationsService {
         this.observers.push(update);
     }
 
+    unsubscribe(update) {
+        const found = this.observers.findIndex(update);
+        if (update > -1) {
+            this.observers.splice(update, 1);
+        }
+    }
+
     dispatch = () => {
         this.observers.forEach(observer => observer(this.locations));
     }
@@ -40,17 +47,53 @@ class LocationsService {
         }).then(response => {
             console.log(response.data.locations.length + " locations fetched.");
             // Parsing locations.
-
-            return response.data.locations.map(r => {
+            this.locations =  response.data.locations.map(r => {
                 const coord = r.coord.substr(1, r.coord.length - 2).split(",");
                 r.coord = coord;
                 return r;
             });
+            
+            this.dispatch();
+            return this.locations;
         }).catch(err => {
             console.log("Could not fetch locations.")
             console.error(err);
             throw err;
         });
+    }
+
+    create = (location) => {
+        console.log(location);
+        return Axios({
+            method: "POST",
+            baseURL: API_URL,
+            url: '/locations',
+            data: {
+                name: location.name,
+                description: location.description,
+                contact: location.contact,
+                coord: location.coord,
+                category: location.category,
+                types: location.type,
+                icon: location.icon,
+                hours: location.hours,
+                site: location.site,
+                token: this.authService.getToken()
+            }
+        }).then(res => {
+            if (res.data.success) {
+                const created = res.data.location;
+                const coord = created.coord.substr(1, created.coord.length - 2).split(",");
+                created.coord = coord;
+                this.locations.push(created);
+                this.dispatch();
+                return created;
+            }
+
+            throw { message: res.data.message ? res.data.message.message : "An error occured." };
+        }).catch(err => {
+            throw err;
+        })
     }
 
 }

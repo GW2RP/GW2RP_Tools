@@ -61,7 +61,6 @@ class RumoursService {
     }
 
     create = (rumor) => {
-        console.log(rumor);
         return Axios({
             method: "POST",
             baseURL: API_URL,
@@ -77,7 +76,12 @@ class RumoursService {
             }
         }).then(res => {
             if (res.data.success) {
-                return res.data.rumours;
+                const created = res.data.rumour;
+                const coord = created.coord.substr(1, created.coord.length - 2).split(",");
+                created.coord = coord;
+                this.rumours.push(created);
+                this.dispatch();
+                return created;
             }
             throw { message: res.data.message ? res.data.message.message : "An error occured." };
         }).catch(err => {
