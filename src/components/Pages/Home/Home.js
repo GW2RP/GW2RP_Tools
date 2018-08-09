@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import Axios from 'axios';
 import { Col, Row, Card, CardBody, CardTitle, ListGroup, ListGroupItem, CardText, CardLink, CardSubtitle } from 'reactstrap';
 
 import Loader from '../../Commons/Loader';
 
 import { formatText } from '../../../utils/formatter';
+
+import { API_URL } from '../../../configuration/Config';
 
 class Home extends Component {
 
@@ -14,6 +17,7 @@ class Home extends Component {
     this.state = {
       rumors: null,
       events: null,
+      today: null,
     }
   }
 
@@ -37,6 +41,16 @@ class Home extends Component {
     }).catch(err => {
       console.error(err);
     });
+
+    Axios({
+      baseURL: API_URL,
+      url: '/aujourdhui',
+    }).then(res => {
+      console.log(res.data)
+      this.setState({today: res.data.today });
+    }).catch(err => {
+      console.error(err);
+    });
   }
 
   componentWillUnmount() {
@@ -44,15 +58,21 @@ class Home extends Component {
   }
 
   render() {
-    const { rumors, events } = this.state;
+    const { rumors, events, today } = this.state;
 
     return (
       <main role="main" className="container-fluid">
         <Row className="justify-content-center p-2">
-          <Col className="text-center lead">Nous sommes le 66 du Zéphyr.</Col>
+          <Col>
+            <Card body className="text-center">
+              <CardBody>
+                <CardTitle>{ today ? `Aujourd'hui, le ${today.date.day} du ${today.date.season.name}, ${today.date.year} AE.` : 'Impossible de charger les informations d\'aujourd\'hui.'}</CardTitle>
+              </CardBody>
+            </Card>
+          </Col>
         </Row>
         <Row className="justify-content-center p-2">
-          <Col sm style={{ maxWidth: "400px" }}>
+          <Col sm style={{ maxWidth: "600px" }}>
             <Card>
               <CardBody>
                 <CardTitle>Prochains évènements</CardTitle>
@@ -80,7 +100,7 @@ class Home extends Component {
               </CardBody>
             </Card>
           </Col>
-          <Col sm style={{ maxWidth: "400px" }}>
+          <Col sm style={{ maxWidth: "600px" }}>
             <Card>
               <CardBody>
                 <CardTitle>Dernières rumeurs</CardTitle>
