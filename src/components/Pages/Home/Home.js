@@ -43,7 +43,7 @@ class Home extends Component {
     });
 
     Axios({
-      baseURL: API_URL,
+      baseURL: 'http://api.nakasar.me',
       url: '/aujourdhui',
     }).then(res => {
       console.log(res.data)
