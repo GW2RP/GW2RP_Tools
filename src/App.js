@@ -18,6 +18,7 @@ import rumoursService from './services/Rumours.Service';
 import eventsService from './services/Events.Service';
 import locationsService from './services/Locations.Service';
 import LocationsService from './services/Locations.Service';
+import Tools from './components/Pages/Tools/Tools';
 
 rumoursService.setAuth(authService);
 eventsService.setAuth(authService);
@@ -124,6 +125,9 @@ class App extends Component {
                 location={props.location}
                 history={props.history}
               />
+            )} />
+            <Route path="/outils" render={({ match }) => (
+              <Tools match={match} />
             )} />
             <Route path="/admin" render={() =>
               auth.isAuthenticated ?

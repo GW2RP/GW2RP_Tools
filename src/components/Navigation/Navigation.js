@@ -24,6 +24,15 @@ class Home extends Component {
             <li className="nav-item">
               <NavLink className="nav-link" activeClassName="active" to="/registre">Personnages</NavLink>
             </li>
+            <li className='nav-item dropdown'>
+              <NavLink className="nav-link dropdown-toggle" activeClassName='active' to='/outils' role='button' data-toggle="dropdown">Outils</NavLink>
+              <div className='dropdown-menu' aria-labelledby='toolsDropdown'>
+                <NavLink className='dropdown-item' to='/outils' exact>Tous les outils</NavLink>
+                <div className="dropdown-divider"></div>
+                <NavLink className='dropdown-item' to='/outils/dates'>Convertisseur</NavLink>
+                <NavLink className='dropdown-item' to='/outils/traducteur'>Traducteur</NavLink>
+              </div>
+            </li>
             {this.props.user && this.props.user.admin && (
               <li className="nav-item">
                 <NavLink className="nav-link" activeClassName="active" to="/registre">Personnages</NavLink>
