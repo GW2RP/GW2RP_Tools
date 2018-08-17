@@ -43,7 +43,7 @@ class Home extends Component {
     });
 
     Axios({
-      baseURL: 'http://api.nakasar.me',
+      baseURL: 'https://api.nakasar.me',
       url: '/aujourdhui',
     }).then(res => {
       console.log(res.data)
@@ -66,7 +66,7 @@ class Home extends Component {
           <Col>
             <Card body className="text-center">
               <CardBody>
-                <CardTitle>{ today ? `Aujourd'hui, le ${today.date.date.day} du ${today.date.date.season.name}, ${today.date.date.year} AE.` : 'Impossible de charger les informations d\'aujourd\'hui.'}</CardTitle>
+                <CardTitle>{ today ? `Aujourd'hui, le ${today.date.day} du ${today.date.season.name}, ${today.date.year} AE.` : 'Impossible de charger les informations d\'aujourd\'hui.'}</CardTitle>
               </CardBody>
             </Card>
           </Col>
