@@ -10,6 +10,8 @@ import Loader from './components/Commons/Loader';
 import Navigation from './components/Navigation';
 import Home from './components/Pages/Home';
 import Cartograph from './components/Pages/Cartograph';
+import Characters from './components/Pages/Compendium/Characters';
+import Guilds from './components/Pages/Compendium/Guilds';
 
 import LogInModal from './components/Commons/Modals/LoginModal';
 
@@ -125,6 +127,12 @@ class App extends Component {
                 location={props.location}
                 history={props.history}
               />
+            )} />
+            <Route path="/registre" render={(props) => (
+              <Characters />
+            )} />
+            <Route path="/guildes" render={(props) => (
+              <Guilds />
             )} />
             <Route path="/outils" render={({ match }) => (
               <Tools match={match} />

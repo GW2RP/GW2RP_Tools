@@ -20,16 +20,11 @@ class Tools extends Component {
                         <div>
                             <h1>Outils Divers</h1>
                             <Link to={`${this.props.match.url}/dates`}>Convertisseur de Dates</Link>
-                            <Link to={`${this.props.match.url}/traducteur`}>Traducteur</Link>
                         </div>
                     </Route>
 
                     <Route path={`${this.props.match.path}/dates`}>
                         <DateConverter />
-                    </Route>
-
-                    <Route path={`${this.props.match.path}/traducteur`}>
-                        <h1>Traducteur</h1>
                     </Route>
                 </Switch>
             </main>
