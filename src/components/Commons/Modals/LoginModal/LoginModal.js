@@ -38,21 +38,39 @@ class logInModal extends Component {
             this.props.toggle();
         }).catch(err => {
             this.setState({
-                loginError: err.message
-            })
-            console.error(err);
+                loginError: err,
+            });
+            console.log(err);
         });
     }
 
     render() {
+        let error;
+        if (this.state.loginError) {
+            switch (this.state.loginError.id) {
+                case "INVALID_CREDENTIALS":
+                    error = "La requête d'identification est incorrecte.";
+                    break;
+                case 'NO_USER':
+                    error = "L'utilisateur n'existe pas.";
+                    break;
+                case "WRONG_CREDENTIALS":
+                    error = "Le mot de passe et le nom d'utilisateur ne correspondent pas.";
+                    break;
+                default:
+                    error = "Le serveur dans les Brumes est inaccessible."
+                    break;
+            }
+        }
+
         return (
             <Modal toggle={this.props.toggle} isOpen={this.props.isOpen}>
                 <ModalHeader toggle={this.props.toggleLogInModal}>Se connecter</ModalHeader>
                 <ModalBody>
                     <div>
-                        {this.state.loginError &&
+                        {error &&
                             <div className="alert alert-danger" role="alert">
-                                <p>{this.state.loginError}</p>
+                                <p>{error}</p>
                             </div>
                         }
                         <form id="login-form" onSubmit={this.handleSubmit}>

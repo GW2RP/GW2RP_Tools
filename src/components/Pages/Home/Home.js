@@ -43,7 +43,7 @@ class Home extends Component {
     });
 
     Axios({
-      baseURL: 'https://api.nakasar.me',
+      baseURL: API_URL,
       url: '/aujourdhui',
     }).then(res => {
       console.log(res.data)
@@ -82,8 +82,8 @@ class Home extends Component {
                   events.slice(0,5).map((event, index) => (
                     <Card key={index}>
                       <CardBody>
-                        <CardTitle>{event.name}</CardTitle>
-                        <CardSubtitle>Le {(new Date(event.end_date)).toLocaleString()}</CardSubtitle>
+                        <CardTitle>{event.title}</CardTitle>
+                        <CardSubtitle>Le {(new Date(event.dates.start)).toLocaleString()}</CardSubtitle>
                       </CardBody>
                       <CardBody>
                         <CardText dangerouslySetInnerHTML={{__html: formatText(event.description) }} style={{ overflow: "hidden", textOverflow: "ellipsis", wordWrap: "break-word", textAlign: "justify", maxHeight: "200px" }}></CardText>
@@ -106,14 +106,15 @@ class Home extends Component {
                 <CardTitle>Dernières rumeurs</CardTitle>
               </CardBody>
               <CardBody>
+              {console.log(rumors)}
                 {rumors ?
                   rumors.slice(0,5).map((rumor, index) => (
                     <Card key={index}>
                       <CardBody>
-                        <CardTitle>{rumor.name}</CardTitle>
+                        <CardTitle>{rumor.title}</CardTitle>
                       </CardBody>
                       <CardBody>
-                        <CardText dangerouslySetInnerHTML={{__html: formatText(rumor.text) }} style={{ textOverflow: "ellipsis", wordWrap: "break-word", textAlign: "justify" }}></CardText>
+                        <CardText dangerouslySetInnerHTML={{__html: formatText(rumor.description) }} style={{ textOverflow: "ellipsis", wordWrap: "break-word", textAlign: "justify" }}></CardText>
                         <p className="small">{rumor.contact}</p>
                         <Link className="card-link" to={`/carte/rumeur/${rumor._id}`}>Voir sur la carte.</Link>
                       </CardBody>

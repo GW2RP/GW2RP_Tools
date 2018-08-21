@@ -16,14 +16,17 @@ class AuthService {
 
     setToken(token) {
         try {
-            const data = JSON.parse(atob(token.split(".")[1]));;
-            this.user_id = data.user_id;
-            this.is_admin = data.admin;
+            const data = JSON.parse(atob(token.split(".")[1]));
+            this.username = data.username;
+            this.admin = data.admin || false;
             this.token = token;
+            
+            localStorage.setItem("token", token);
+            localStorage.setItem("username", data.username);
         } catch (e) {
             console.error("Invalid token in memory.");
-            this.user_id = null;
-            this.is_admin = null;
+            this.username = null;
+            this.admin = false;
             this.token = null;
         }
     }
@@ -36,34 +39,22 @@ class AuthService {
         return Axios({
             method: "POST",
             baseURL: API_URL,
-            url: '/login',
+            url: '/auth',
             data: {
-                nick_name: username,
+                username,
                 password
             }
         }).then(response => {
-            if (!response.data.success) {
-                throw new Error(response.data.message || "Une erreur est survenue.");
-            }
-            // Store token in localStorage.
-            localStorage.setItem("username", username);
-            this.username = username;
-            localStorage.setItem("token", response.data.token);
-
             // Parse token.
-            const token = JSON.parse(atob(response.data.token.split(".")[1]));
+            const token = response.data.token;
+            this.setToken(token);
 
-            localStorage.setItem("userid", token.user_id);
-            this.user_id = token.user_id;
-            this.is_admin = token.admin;
-
-            this.setToken(response.data.token);
-            return response.data.token;
+            return token;
         }).catch(err => {
             if (err.response && err.response.data) {
-                throw new Error({ message: err.response.data.message || "Nous n'avons pas pu vous identifier.", code : err.response.status });
+                throw { message: err.response.data.error.message || "Nous n'avons pas pu vous identifier.", id: err.response.data.error.id };
             }
-            throw err;
+            throw { message: "Nous n'avons pas pu contacter le serveur dans les Brumes.", id: "NETWORK_ERROR" };
         });
     }
 
@@ -88,6 +79,8 @@ class AuthService {
         if (!token) {
             return Promise.resolve(false);
         }
+
+        return Promise.resolve(true);
 
         return Axios({
             method: "POST",

@@ -4,10 +4,6 @@ import {
     Form, FormGroup, Input, Label,
 } from 'reactstrap';
 
-import Axios from 'axios';
-
-import { API_URL } from '../../../../configuration/Config';
-
 class DateConverter extends Component {
 
     constructor(props) {

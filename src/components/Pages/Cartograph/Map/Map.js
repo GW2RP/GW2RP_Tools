@@ -148,12 +148,12 @@ class Cartograph extends Component {
 
         this.props.rumours.forEach(r => {
             var popupContent = '<h3>' + r.name + '</h3><br>';
-            popupContent += r.text.replace(/\n/g, "<br>");
-            if (r.site.length > 0) {
+            popupContent += r.description.replace(/\n/g, "<br>");
+            if (r.site && r.site.length > 0) {
                 popupContent += '<br><a target="_blank" href="' + r.site + '">site web</a>';
             }
             
-            let marker = L.marker(this.unproject(r.coord), { icon: icons.rumour }).bindPopup(popupContent);
+            let marker = L.marker(this.unproject([r.coordinates.x, r.coordinates.y]), { icon: icons.rumour }).bindPopup(popupContent);
             marker.on('click', (e) => {
                 this.props.showSideBar(r);
             });
@@ -174,11 +174,11 @@ class Cartograph extends Component {
         this.props.events.forEach(r => {
             var popupContent = '<h3>' + r.name + '</h3><br>';
             popupContent += r.description.replace(/\n/g, "<br>");
-            if (r.site.length > 0) {
+            if (r.site && r.site.length > 0) {
                 popupContent += '<br><a target="_blank" href="' + r.site + '">site web</a>';
             }
 
-            let marker = L.marker(this.unproject(r.coord), { icon: icons[r.icon] }).bindPopup(popupContent);
+            let marker = L.marker(this.unproject([r.coordinates.x, r.coordinates.y]), { icon: icons[r.icon] }).bindPopup(popupContent);
             marker.on('click', (e) => {
                 this.props.showSideBar(r);
             });
@@ -199,11 +199,11 @@ class Cartograph extends Component {
         this.props.locations.forEach(r => {
             var popupContent = '<h3>' + r.name + '</h3><br>';
             popupContent += r.description.replace(/\n/g, "<br>");
-            if (r.site.length > 0) {
+            if (r.site && r.site.length > 0) {
                 popupContent += '<br><a target="_blank" href="' + r.site + '">site web</a>';
             }
 
-            let marker = L.marker(this.unproject(r.coord), { icon: icons[r.icon] }).bindPopup(popupContent);
+            let marker = L.marker(this.unproject([r.coordinates.x, r.coordinates.y]), { icon: icons[r.icon] }).bindPopup(popupContent);
             marker.on('click', (e) => {
                 this.props.showSideBar(r);
             });
@@ -243,7 +243,6 @@ class Cartograph extends Component {
         // point.x, point.y
         if (this.props.isSignedIn()) {
             console.log("Add marker");
-            console.log(point);
             this.props.toggleNewMarkerModal([point.x, point.y]);
         } else {
             console.log("Show loginModal");

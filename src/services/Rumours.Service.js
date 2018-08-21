@@ -5,7 +5,7 @@ import { API_URL } from '../configuration/Config';
 class RumoursService {
 
     constructor() {
-        this.rumours = null;
+        this.rumors = null;
         this.observers = [];
     }
 
@@ -22,13 +22,13 @@ class RumoursService {
     }
 
     dispatch = () => {
-        this.observers.forEach(observer => observer(this.rumours));
+        this.observers.forEach(observer => observer(this.rumors));
     }
 
     getAll = () => {
         return Promise.resolve().then(() => {
-            if (this.rumours) {
-                return this.rumours;
+            if (this.rumors) {
+                return this.rumors;
             }
 
             return this.fetchAll();
@@ -36,25 +36,19 @@ class RumoursService {
     }
 
     fetchAll = () => {
-        console.log("Fetching rumours...")
+        console.log("Fetching rumors...")
         return Axios({
             method: "GET",
             baseURL: API_URL,
-            url: '/rumours'
+            url: '/rumors'
         }).then(response => {
-            console.log(response.data.rumours.length + " rumours fetched.");
-            // Parsing rumours.
+            console.log(response.data.rumors.length + " rumors fetched.");
 
-            this.rumours = response.data.rumours.map(r => {
-                const coord = r.coord.substr(1, r.coord.length - 2).split(",");
-                r.coord = coord;
-                return r;
-            });
-
+            this.rumors = response.data.rumors;
             this.dispatch();
-            return this.rumours;
+            return this.rumors;
         }).catch(err => {
-            console.log("Could not fetch rumours.")
+            console.log("Could not fetch rumors.")
             console.error(err);
             throw err;
         });
@@ -64,7 +58,7 @@ class RumoursService {
         return Axios({
             method: "POST",
             baseURL: API_URL,
-            url: '/rumours',
+            url: '/rumors',
             data: {
                 name: rumor.title,
                 text: rumor.text,
@@ -79,7 +73,7 @@ class RumoursService {
                 const created = res.data.rumour;
                 const coord = created.coord.substr(1, created.coord.length - 2).split(",");
                 created.coord = coord;
-                this.rumours.push(created);
+                this.rumors.push(created);
                 this.dispatch();
                 return created;
             }

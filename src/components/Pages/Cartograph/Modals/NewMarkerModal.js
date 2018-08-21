@@ -50,21 +50,21 @@ class NewMarkerModal extends Component {
         this.state = {
             tab: 'location',
             location: {
-                name: "",
-                type: [],
+                title: "",
+                types: [],
                 contact: "",
-                hours: "",
+                opening_hours: "",
                 description: "",
                 site: "",
                 icon: ""
             },
             event: {
-                name: "",
-                type: [],
+                title: "",
+                types: [],
                 difficulty: "normal",
                 contact: "",
+                start_date: "",
                 end_date: "",
-                end_hour: "",
                 description: "",
                 site: "",
                 icon: ""
@@ -72,7 +72,7 @@ class NewMarkerModal extends Component {
             rumor: {
                 title: "",
                 contact: "",
-                text: "",
+                description: "",
                 site: ""
             }
         }
@@ -89,7 +89,7 @@ class NewMarkerModal extends Component {
     addMarker = (event) => {
         event.preventDefault();
         const marker = this.state[this.state.tab];
-        marker.coord = `[${this.props.coord[0]},${this.props.coord[1]}]`;
+        marker.coordinates = { x: this.props.coord[0], y: this.props.coord[1] };
         this.props.addMarker(this.state.tab, marker);
     }
 
@@ -154,12 +154,12 @@ class NewMarkerModal extends Component {
                                 <p className="text-info">Les lieux permanents restent affichés pendant trois mois avant d'être effacés, sauf s'ils recoivent des mises à jour. Activez les notifications mail pour ne pas oublier de les prolonger.</p>
                                 <Form onSubmit={this.addMarker}>
                                     <FormGroup>
-                                        <Label for="name">Nom du Lieu</Label>
-                                        <Input type="text" name="name" value={this.state.location.name} onChange={this.handleInputChange} placeholder="Grande Cathédrale D'Abaddon" required />
+                                        <Label for="title">Nom du Lieu</Label>
+                                        <Input type="text" name="title" value={this.state.location.title} onChange={this.handleInputChange} placeholder="Grande Cathédrale D'Abaddon" required />
                                     </FormGroup>
                                     <FormGroup>
-                                        <Label for="type">Type</Label>
-                                        <Input type="select" name="type" multiple value={this.state.location.type} onChange={this.handleInputChange} required>
+                                        <Label for="types">Type</Label>
+                                        <Input type="select" name="types" multiple value={this.state.location.types} onChange={this.handleInputChange} required>
                                             <option value="tavern">Taverne</option>
                                             <option value="trading">Commerce</option>
                                             <option value="exploration">Exploration</option>
@@ -174,8 +174,8 @@ class NewMarkerModal extends Component {
                                         <Input type="text" name="contact" placeholder="Abaddon.6666" value={this.state.location.contact} onChange={this.handleInputChange} required />
                                     </FormGroup>
                                     <FormGroup>
-                                        <Label for="hours">Horaires d'Activité</Label>
-                                        <Input type="text" name="hours" placeholder="Tous les jours 20h-22h" value={this.state.location.hours} onChange={this.handleInputChange} required />
+                                        <Label for="opening_hours">Horaires d'Activité</Label>
+                                        <Input type="text" name="opening_hours" placeholder="Tous les jours 20h-22h" value={this.state.location.opening_hours} onChange={this.handleInputChange} required />
                                     </FormGroup>
                                     <FormGroup>
                                         <Label for="description">Description.</Label>
@@ -213,8 +213,8 @@ class NewMarkerModal extends Component {
                                 <p className="text-info">Les évènements sont automatiquement effacés au lendemain de leur date de fin.</p>
                                 <Form onSubmit={this.addMarker}>
                                     <FormGroup>
-                                        <Label for="name">Titre de l'évènement</Label>
-                                        <Input type="text" name="name" placeholder="Attaque de Centaures" value={this.state.event.name} onChange={this.handleInputChange} required />
+                                        <Label for="title">Titre de l'évènement</Label>
+                                        <Input type="text" name="title" placeholder="Attaque de Centaures" value={this.state.event.title} onChange={this.handleInputChange} required />
                                     </FormGroup>
                                     <FormGroup>
                                         <Label for="difficulty">Difficulté</Label>
@@ -228,8 +228,8 @@ class NewMarkerModal extends Component {
                                         }
                                     </FormGroup>
                                     <FormGroup>
-                                        <Label for="type">Type</Label>
-                                        <Input type="select" name="type" multiple value={this.state.event.type} onChange={this.handleInputChange} required>
+                                        <Label for="types">Type</Label>
+                                        <Input type="select" name="types" multiple value={this.state.event.types} onChange={this.handleInputChange} required>
                                             <option value="battle">Bataille</option>
                                             <option value="camp">Campement</option>
                                             <option value="communitary">Communautaire</option>
@@ -243,11 +243,19 @@ class NewMarkerModal extends Component {
                                         <Input type="text" name="contact" placeholder="Abaddon.6666" value={this.state.event.contact} onChange={this.handleInputChange} required />
                                     </FormGroup>
                                     <FormGroup>
-                                        <Label for="end_date">Date (ou date de fin)</Label>
+                                        <Label for="start_date">Date de début</Label>
                                         <Input type="date" name="end_date" value={this.state.event.end_date} onChange={this.handleInputChange} required />
                                     </FormGroup>
                                     <FormGroup>
-                                        <Label for="end_hour">Heure</Label>
+                                        <Label for="start_hour">Heure de début</Label>
+                                        <Input type="time" name="end_hour" value={this.state.event.end_hour} onChange={this.handleInputChange} required />
+                                    </FormGroup>
+                                    <FormGroup>
+                                        <Label for="end_date">Date de fin</Label>
+                                        <Input type="date" name="end_date" value={this.state.event.end_date} onChange={this.handleInputChange} required />
+                                    </FormGroup>
+                                    <FormGroup>
+                                        <Label for="end_hour">Heure de fin</Label>
                                         <Input type="time" name="end_hour" value={this.state.event.end_hour} onChange={this.handleInputChange} required />
                                     </FormGroup>
                                     <FormGroup>
@@ -297,7 +305,7 @@ class NewMarkerModal extends Component {
                                         <Input type="text" name="contact" placeholder="Abaddon.6666" value={this.state.rumor.contact} onChange={this.handleInputChange} required />
                                     </FormGroup>
                                     <FormGroup>
-                                        <Label for="text">Description</Label>
+                                        <Label for="description">Description</Label>
                                         <Input type="textarea" rows="8" name="text" placeholder="Des centaures attaquent la Garnison de Kryte, les Séraphins recherchent de l'aide auprès de braves mercenaires." value={this.state.rumor.description} onChange={this.handleInputChange} required />
                                         <FormText color="muted">
                                             Vous pouvez utiliser les balises de mise en forme.

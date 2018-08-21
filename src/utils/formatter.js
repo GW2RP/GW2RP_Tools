@@ -2,6 +2,7 @@
 const regex_html = /<(.)*?>/;
 
 function formatText(text) {
+    if (!text) return "";
     var formatted = "";
     formatted = text.replace(regex_html, "")
     formatted = formatted.replace(/\[color=(.+?)\](.+?)\[\/color\]/g, '<span style="color: $1;">$2</span>');

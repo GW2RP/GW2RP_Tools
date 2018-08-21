@@ -39,13 +39,9 @@ class EventsService {
             url: '/events'
         }).then(response => {
             console.log(response.data.events.length + " events fetched.");
-            // Parsing events.
-
-            return response.data.events.map(r => {
-                const coord = r.coord.substr(1, r.coord.length - 2).split(",");
-                r.coord = coord;
-                return r;
-            });
+            this.events = response.data.events;
+            this.dispatch();
+            return response.data.events;
         }).catch(err => {
             console.log("Could not fetch events.")
             console.error(err);

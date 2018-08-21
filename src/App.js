@@ -106,61 +106,64 @@ class App extends Component {
     }
 
     return (
-      <Router>
-        <div className="App">
-          <LogInModal isOpen={this.state.logInModal} toggle={this.toggleLogInModal} signIn={this.signIn}/>
-          <Navigation logOut={this.logOut} logInModal={() => this.toggleLogInModal()} user={auth.user} />
-          <Switch>
-            <Route exact path="/" render={() => (
-              <Home
-                rumoursService={rumoursService}
-                eventsService={eventsService}
-              />
-            )} />
-            <Route path="/carte" render={(props) => (
-              <Cartograph
-                rumoursService={rumoursService}
-                eventsService={eventsService}
-                locationsService={locationsService}
-                authService={authService}
-                toggleLogInModal={this.toggleLogInModal}
-                location={props.location}
-                history={props.history}
-              />
-            )} />
-            <Route path="/registre" render={(props) => (
-              <Characters />
-            )} />
-            <Route path="/guildes" render={(props) => (
-              <Guilds />
-            )} />
-            <Route path="/outils" render={({ match }) => (
-              <Tools match={match} />
-            )} />
-            <Route path="/admin" render={() =>
-              auth.isAuthenticated ?
-                (
-                  <Switch>
-                    <Route>
-                      <main className="container text-center" style={{ "marginTop": "20vh" }}>
-                        <Loader />
-                        <h1>Not Implemented</h1>
-                      </main>
-                    </Route>
-                  </Switch>
-                )
-                :
-                (
-                  <h1>Vous n'avez pas l'autorisation d'accéder à cette page.</h1>
-                )
-            }>
-            </Route>
-            <Route>
-              <h1>404</h1>
-            </Route>
-          </Switch>
-        </div>
-      </Router>
+      <div className="App h-100">
+        <Router>
+          <div>
+            <LogInModal isOpen={this.state.logInModal} toggle={this.toggleLogInModal} signIn={this.signIn}/>
+            <Navigation logOut={this.logOut} logInModal={() => this.toggleLogInModal()} user={auth.user} />
+
+            <Switch>
+              <Route exact path="/" render={() => (
+                <Home
+                  rumoursService={rumoursService}
+                  eventsService={eventsService}
+                />
+              )} />
+              <Route path="/carte" render={(props) => (
+                <Cartograph
+                  rumoursService={rumoursService}
+                  eventsService={eventsService}
+                  locationsService={locationsService}
+                  authService={authService}
+                  toggleLogInModal={this.toggleLogInModal}
+                  location={props.location}
+                  history={props.history}
+                />
+              )} />
+              <Route path="/registre" render={(props) => (
+                <Characters />
+              )} />
+              <Route path="/guildes" render={(props) => (
+                <Guilds />
+              )} />
+              <Route path="/outils" render={({ match }) => (
+                <Tools match={match} />
+              )} />
+              <Route path="/admin" render={() =>
+                auth.isAuthenticated ?
+                  (
+                    <Switch>
+                      <Route>
+                        <main className="container text-center" style={{ "marginTop": "20vh" }}>
+                          <Loader />
+                          <h1>Not Implemented</h1>
+                        </main>
+                      </Route>
+                    </Switch>
+                  )
+                  :
+                  (
+                    <h1>Vous n'avez pas l'autorisation d'accéder à cette page.</h1>
+                  )
+              }>
+              </Route>
+              <Route>
+                <h1>404</h1>
+              </Route>
+            </Switch>
+          </div>
+        </Router>
+      </div>
     );
   }
 }

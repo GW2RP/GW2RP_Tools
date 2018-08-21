@@ -47,12 +47,7 @@ class LocationsService {
         }).then(response => {
             console.log(response.data.locations.length + " locations fetched.");
             // Parsing locations.
-            this.locations =  response.data.locations.map(r => {
-                const coord = r.coord.substr(1, r.coord.length - 2).split(",");
-                r.coord = coord;
-                return r;
-            });
-            
+            this.locations =  response.data.locations;
             this.dispatch();
             return this.locations;
         }).catch(err => {
