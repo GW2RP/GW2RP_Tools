@@ -64,6 +64,11 @@ class Home extends Component {
       <main role="main" className="container-fluid">
         <Row className="justify-content-center p-2">
           <Col>
+            <p class="lead">Attention : les données sur le site de test seront effacées.</p>
+          </Col>
+        </Row>
+        <Row className="justify-content-center p-2">
+          <Col>
             <Card body className="text-center">
               <CardBody>
                 <CardTitle>{ today ? `Aujourd'hui, le ${today.date.day} du ${today.date.season.name}, ${today.date.year} AE.` : 'Impossible de charger les informations d\'aujourd\'hui.'}</CardTitle>

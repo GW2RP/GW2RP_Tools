@@ -107,6 +107,25 @@ class AuthService {
             this.listener = null;
         }
     }
+
+    signUp(user) {
+        return Axios({
+            method: "POST",
+            baseURL: API_URL,
+            url: '/signup',
+            data: {
+                user,
+            }
+        }).then(response => {
+            console.log(response.data);
+            return response.data;
+        }).catch(err => {
+            if (err.response && err.response.data) {
+                throw { message: err.response.data.error.message || "Nous n'avons pas pu vous enregistrer.", id: err.response.data.error.id, details: err.response.data.error.details };
+            }
+            throw { message: "Nous n'avons pas pu contacter le serveur dans les Brumes.", id: "NETWORK_ERROR" };
+        });
+    }
 }
 
 export default new AuthService();

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import SignUpForm from './SignUpForm/SignUpForm';
 
 class logInModal extends Component {
     constructor(props) {
@@ -44,7 +45,25 @@ class logInModal extends Component {
         });
     }
 
+    
+
     render() {
+
+        if (this.state.signUp) {
+            return (
+                <Modal toggle={this.props.toggle} isOpen={this.props.isOpen}>
+                    <ModalHeader toggle={this.props.toggleLogInModal}>S'enregistrer</ModalHeader>
+                    <ModalBody>
+                        <SignUpForm signUp={this.props.signUp} signUpComplete={() => this.setState({ signUp: false })} />
+                    </ModalBody>
+                    <ModalFooter>
+                        <button type="submit" form="signup-form" className="btn btn-success">Valider</button>
+                        <button type="button" className="btn btn-outline-secondary" onClick={() => this.setState({ signUp: false })}>J'ai déjà un compte</button>
+                    </ModalFooter>
+                </Modal>
+            );
+        }
+
         let error;
         if (this.state.loginError) {
             switch (this.state.loginError.id) {
@@ -87,7 +106,7 @@ class logInModal extends Component {
                 </ModalBody>
                 <ModalFooter>
                     <button type="submit" form="login-form" className="btn btn-primary">Connexion</button>
-                    <button type="button" className="btn btn-success">S'enregistrer</button>
+                    <button type="button" className="btn btn-success" onClick={() => this.setState({ signUp: true })}>S'enregistrer</button>
                 </ModalFooter>
             </Modal>
         );

@@ -50,31 +50,33 @@ class NewMarkerModal extends Component {
         this.state = {
             tab: 'location',
             location: {
-                title: "",
+                title: '',
+                description: '',
+                contact: '',
+                site: '',
                 types: [],
-                contact: "",
-                opening_hours: "",
-                description: "",
-                site: "",
-                icon: ""
+                icon: '',
+                opening_hours: '',
             },
             event: {
                 title: "",
-                types: [],
+                description: "",
                 difficulty: "normal",
                 contact: "",
-                start_date: "",
-                end_date: "",
-                description: "",
                 site: "",
-                icon: ""
+                types: [],
+                icon: "",
+                start_date: "",
+                start_hour: '',
+                end_date: "",
+                end_hour: '',
             },
             rumor: {
                 title: "",
                 contact: "",
                 description: "",
                 site: ""
-            }
+            },
         }
     }
 
@@ -111,7 +113,7 @@ class NewMarkerModal extends Component {
 
         let obj = this.state[this.state.tab];
         obj[name] = value;
-
+        
         this.setState({
             [this.state.tab]: obj
         });

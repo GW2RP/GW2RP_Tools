@@ -109,7 +109,7 @@ class App extends Component {
       <div className="App h-100">
         <Router>
           <div>
-            <LogInModal isOpen={this.state.logInModal} toggle={this.toggleLogInModal} signIn={this.signIn}/>
+            <LogInModal isOpen={this.state.logInModal} toggle={this.toggleLogInModal} signIn={this.signIn} signUp={authService.signUp} />
             <Navigation logOut={this.logOut} logInModal={() => this.toggleLogInModal()} user={auth.user} />
 
             <Switch>
