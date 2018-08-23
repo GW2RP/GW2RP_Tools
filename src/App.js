@@ -20,6 +20,7 @@ import rumoursService from './services/Rumours.Service';
 import eventsService from './services/Events.Service';
 import locationsService from './services/Locations.Service';
 import LocationsService from './services/Locations.Service';
+import charactersService from './services/Characters.Service';
 import Tools from './components/Pages/Tools/Tools';
 
 rumoursService.setAuth(authService);
@@ -131,7 +132,11 @@ class App extends Component {
                 />
               )} />
               <Route path="/registre" render={(props) => (
-                <Characters />
+                <Characters
+                  charactersService={charactersService}
+                  location={props.location}
+                  history={props.history}
+                />
               )} />
               <Route path="/guildes" render={(props) => (
                 <Guilds />

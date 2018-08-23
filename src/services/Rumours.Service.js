@@ -55,32 +55,27 @@ class RumoursService {
     }
 
     create = (rumor) => {
+        console.log('Creating a Rumor...');
         return Axios({
             method: "POST",
             baseURL: API_URL,
             url: '/rumors',
+            headers: {
+                'Authorization': `Bearer ${this.authService.getToken()}`,
+            },
             data: {
-                name: rumor.title,
-                text: rumor.text,
-                contact: rumor.contact,
-                coord: rumor.coord,
-                category: rumor.category,
-                site: rumor.site,
-                token: this.authService.getToken()
-            }
-        }).then(res => {
-            if (res.data.success) {
-                const created = res.data.rumour;
-                const coord = created.coord.substr(1, created.coord.length - 2).split(",");
-                created.coord = coord;
-                this.rumors.push(created);
-                this.dispatch();
-                return created;
-            }
-            throw { message: res.data.message ? res.data.message.message : "An error occured." };
+                rumor,
+            },
+        }).then(response => {
+            console.log('Rumor created.');
+            this.rumors.push(response.data.rumor);
+            this.dispatch();
+            return response.data.rumor;
         }).catch(err => {
+            console.log('Could not create rumor.');
+            console.error(err);
             throw err;
-        })
+        });
     }
 }
 

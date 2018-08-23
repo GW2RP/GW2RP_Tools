@@ -49,6 +49,29 @@ class EventsService {
         });
     }
 
+    create = (event) => {
+        console.log('Creating an Event...');
+        return Axios({
+            method: 'POST',
+            baseURL: API_URL,
+            url: '/Events',
+            headers: {
+                'Authorization': `Bearer ${this.authService.getToken()}`,
+            },
+            data: {
+                event,
+            },
+        }).then(response => {
+            console.log('Event created.');
+            this.events.push(response.data.event);
+            this.dispatch();
+            return response.data.event;
+        }).catch(err => {
+            console.log('Could not create event.');
+            console.error(err);
+            throw err;
+        });
+    }
 }
 
 export default new EventsService();

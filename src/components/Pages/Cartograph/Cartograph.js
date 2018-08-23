@@ -91,6 +91,14 @@ class Cartograph extends Component {
         });
         break;
       case "event":
+        this.props.eventsService.create(marker).then(created => {
+          this.toggleNewMarkerModal(null);
+        }).catch(err => {
+          console.error(err);
+          this.setState({
+            newMarkerError: err.message
+          });
+        });
         break;
       case "location":
         this.props.locationsService.create(marker).then(created => {

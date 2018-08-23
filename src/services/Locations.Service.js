@@ -58,37 +58,27 @@ class LocationsService {
     }
 
     create = (location) => {
-        console.log(location);
+        console.log('Creating a Location...');
         return Axios({
             method: "POST",
             baseURL: API_URL,
             url: '/locations',
+            headers: {
+                'Authorization': `Bearer ${this.authService.getToken()}`,
+            },
             data: {
-                name: location.name,
-                description: location.description,
-                contact: location.contact,
-                coord: location.coord,
-                category: location.category,
-                types: location.type,
-                icon: location.icon,
-                hours: location.hours,
-                site: location.site,
-                token: this.authService.getToken()
-            }
-        }).then(res => {
-            if (res.data.success) {
-                const created = res.data.location;
-                const coord = created.coord.substr(1, created.coord.length - 2).split(",");
-                created.coord = coord;
-                this.locations.push(created);
-                this.dispatch();
-                return created;
-            }
-
-            throw { message: res.data.message ? res.data.message.message : "An error occured." };
+                location,
+            },
+        }).then(response => {
+            console.log('Location created.');
+            this.locations.push(response.data.location);
+            this.dispatch();
+            return response.data.location;
         }).catch(err => {
+            console.log('Could not create location.');
+            console.error(err);
             throw err;
-        })
+        });
     }
 
 }

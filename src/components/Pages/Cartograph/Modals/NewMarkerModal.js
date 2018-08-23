@@ -70,6 +70,7 @@ class NewMarkerModal extends Component {
                 start_hour: '',
                 end_date: "",
                 end_hour: '',
+                dates: { start: new Date(), end: new Date()},
             },
             rumor: {
                 title: "",
@@ -92,6 +93,19 @@ class NewMarkerModal extends Component {
         event.preventDefault();
         const marker = this.state[this.state.tab];
         marker.coordinates = { x: this.props.coord[0], y: this.props.coord[1] };
+
+        if (this.state.tab === 'event') {
+            // Modifify dates.
+            let start = new Date(this.state.event.start_date + " " + this.state.event.start_hour);
+            let end = new Date(this.state.event.end_date + " " + this.state.event.end_hour);
+
+            marker.dates = { start, end };
+            delete marker.start_hour;
+            delete marker.start_date;
+            delete marker.end_hour;
+            delete marker.end_date;
+        }
+
         this.props.addMarker(this.state.tab, marker);
     }
 
@@ -246,11 +260,11 @@ class NewMarkerModal extends Component {
                                     </FormGroup>
                                     <FormGroup>
                                         <Label for="start_date">Date de début</Label>
-                                        <Input type="date" name="end_date" value={this.state.event.end_date} onChange={this.handleInputChange} required />
+                                        <Input type="date" name="start_date" value={this.state.event.start_date} onChange={this.handleInputChange} required />
                                     </FormGroup>
                                     <FormGroup>
                                         <Label for="start_hour">Heure de début</Label>
-                                        <Input type="time" name="end_hour" value={this.state.event.end_hour} onChange={this.handleInputChange} required />
+                                        <Input type="time" name="start_hour" value={this.state.event.start_hour} onChange={this.handleInputChange} required />
                                     </FormGroup>
                                     <FormGroup>
                                         <Label for="end_date">Date de fin</Label>
@@ -308,7 +322,7 @@ class NewMarkerModal extends Component {
                                     </FormGroup>
                                     <FormGroup>
                                         <Label for="description">Description</Label>
-                                        <Input type="textarea" rows="8" name="text" placeholder="Des centaures attaquent la Garnison de Kryte, les Séraphins recherchent de l'aide auprès de braves mercenaires." value={this.state.rumor.description} onChange={this.handleInputChange} required />
+                                        <Input type="textarea" rows="8" name="description" placeholder="Des centaures attaquent la Garnison de Kryte, les Séraphins recherchent de l'aide auprès de braves mercenaires." value={this.state.rumor.description} onChange={this.handleInputChange} required />
                                         <FormText color="muted">
                                             Vous pouvez utiliser les balises de mise en forme.
                                         </FormText>
