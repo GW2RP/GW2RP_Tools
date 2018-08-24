@@ -49,7 +49,7 @@ class AuthService {
             const token = response.data.token;
             this.setToken(token);
 
-            return token;
+            return {token, user: { username: this.username, admin: this.admin }};
         }).catch(err => {
             if (err.response && err.response.data) {
                 throw { message: err.response.data.error.message || "Nous n'avons pas pu vous identifier.", id: err.response.data.error.id };
@@ -77,10 +77,10 @@ class AuthService {
         const token = this.getToken();
 
         if (!token) {
-            return Promise.resolve(false);
+            return Promise.resolve({ success: false, user: {}});
         }
 
-        return Promise.resolve(true);
+        return Promise.resolve({ success: true, user: { username: this.username, admin: this.admin }});
 
         return Axios({
             method: "POST",

@@ -38,8 +38,8 @@ class App extends Component {
         isAuthenticated: false,
         user: {},
         token: null,
-        logInModal: false
-      }
+      },
+      logInModal: false,
     };
   }
 
@@ -50,35 +50,35 @@ class App extends Component {
     if (username && token) {
       authService.setToken(token);
       authService.setUser(username);
-      authService.checkToken().then(success => {
+      authService.checkToken().then(({success, user}) => {
         if (success) {
           this.setState({
             auth: {
               isAuthenticating: false,
               isAuthenticated: true,
-              user: { username },
-              token: token
+              token: token,
+              user,
             }
           });
         } else {
           authService.setToken(null);
-          this.setState({ auth: { isAuthenticating: false } });
+          this.setState({ auth: { isAuthenticating: false, user: {} } });
         }
       });
     } else {
-      this.setState({ auth: { isAuthenticating: false } });
+      this.setState({ auth: { isAuthenticating: false, user: {} } });
     }
 
     authService.onLogOut(() => this.onUserAuthentication());
   }
 
-  onUserAuthentication = (auth = false, token = null, user = {}, admin = false) => {
-    this.setState({ auth: { isAuthenticated: auth, user, token, admin } });
+  onUserAuthentication = (auth = false, token = null, user = {}) => {
+    this.setState({ auth: { isAuthenticated: auth, user, token } });
   }
   
   signIn = (username, password) => {
-    return authService.signIn(username, password).then(token => {
-      this.onUserAuthentication(true, token, { username }, false);
+    return authService.signIn(username, password).then(({token, user}) => {
+      this.onUserAuthentication(true, token, user);
       return true;
     });
   }
@@ -134,6 +134,9 @@ class App extends Component {
               <Route path="/registre" render={(props) => (
                 <Characters
                   charactersService={charactersService}
+                  currentUser={this.state.auth.user}
+                  isSignedIn={() => authService.isSignedIn()}
+                  toggleLogInModal={this.toggleLogInModal}
                   location={props.location}
                   history={props.history}
                 />
