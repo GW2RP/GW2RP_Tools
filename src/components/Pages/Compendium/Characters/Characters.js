@@ -61,7 +61,7 @@ export default class Characters extends Component {
     }
 
     let charactersToDisplay = characters;
-    console.log(this.props.currentUser);
+    
     if (this.state.filterMines) {
       charactersToDisplay.filter(character => character.owner.username.toLowerCase() === this.props.currentUser.username );
     }
@@ -91,7 +91,7 @@ export default class Characters extends Component {
             </div>            
             
             {this.props.currentUser.username && 
-              <p>Afficher : <a href='#' className={`badge badge-${this.state.filterMines ? 'light' : 'info'}`} onClick={() => this.setState({ filterMines: false })}>tous</a>, <a href='#' className={`badge badge-${this.state.filterMines ? 'info' : 'light'}`} onClick={() => this.setState({ filterMines: true })}>mes personnages</a>.</p>
+              <p>Afficher : <a href='#' className={`badge badge-${this.state.filterMines ? 'light' : 'info'}`} onClick={(event) => {event.preventDefault(); this.setState({ filterMines: false })}}>tous</a>, <a href='#' className={`badge badge-${this.state.filterMines ? 'info' : 'light'}`} onClick={(event) => { event.preventDefault(); this.setState({ filterMines: true })}}>mes personnages</a>.</p>
             }
 
             <p>Tags : 
