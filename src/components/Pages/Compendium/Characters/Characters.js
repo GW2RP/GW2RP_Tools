@@ -4,6 +4,7 @@ import { Link, NavLink } from 'react-router-dom';
 import Loader from '../../../Commons/Loader';
 
 import CharacterDetails from './CharacterDetails';
+import NewCharacter from './NewCharacter';
 
 export default class Characters extends Component {
   constructor(props) {
@@ -33,6 +34,8 @@ export default class Characters extends Component {
   newCharacter = () => {
     if (!this.props.isSignedIn()) {
       this.props.toggleLogInModal();
+    } else {
+      this.setState({ newCharacter: true });
     }
   }
 
@@ -113,8 +116,13 @@ export default class Characters extends Component {
                   selected={selected} 
                   currentUser={this.props.currentUser}
                   charactersService={this.props.charactersService}
-                />
+                  />
               </div>
+            }
+            {this.state.newCharacter &&
+              <NewCharacter
+                charactersService={this.props.charactersService}
+                />
             }
           </div>
         </div>
