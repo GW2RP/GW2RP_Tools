@@ -1,0 +1,30 @@
+{
+    "extends": [
+        "eslint:recommended",
+        "plugin:react/recommended"
+    ],
+    "settings": {
+        "react": {
+            "createClass": "createReactClass",
+            "pragma": "React",
+            "version": "15.0",
+            "flowVersion": "0.53"
+        },
+        "propWrapperFunctions": ["forbidExtraProps"]
+    },
+    "plugins": [
+        "react"
+    ],
+    "parser": "babel-eslint",
+    "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true
+        }
+    },
+    "rules": {
+        "react/jsx-uses-react": "error",
+        "react/jsx-uses-vars": "error",
+        "no-console": "off",
+        "no-unused-vars": "warn"
+    }
+}

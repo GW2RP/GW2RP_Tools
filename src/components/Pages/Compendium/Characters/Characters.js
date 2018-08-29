@@ -1,12 +1,13 @@
-import React, { Component } from 'react'
-import { Link, NavLink } from 'react-router-dom';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { Link, NavLink, Redirect } from 'react-router-dom';
 
 import Loader from '../../../Commons/Loader';
 
 import CharacterDetails from './CharacterDetails';
 import NewCharacter from './NewCharacter';
 
-export default class Characters extends Component {
+class Characters extends Component {
   constructor(props) {
     super(props);
 
@@ -37,6 +38,11 @@ export default class Characters extends Component {
     } else {
       this.setState({ newCharacter: true });
     }
+  }
+
+  onCharacterCreated = (id) => {
+    this.setState({ newCharacter: false });
+    this.props.history.push(`/registre/id/${id}`);
   }
 
   render() {
@@ -81,9 +87,9 @@ export default class Characters extends Component {
     }
 
     return (
-      <main role="main" className="container-fluid">
-        <div className='row'>
-          <div className='col-md-4 d-none d-md-block'>
+      <main role="main" className="container-fluid h-100">
+        <div className='row h-100'>
+          <div className='col-md-4 d-none d-md-block border-right' style={{ maxWidth: '300px' }}>
             <div className='row justify-content-between align-items-center'>
               <div className='col'>
                 <h1 className='mt-2 h3'>Liste</h1>
@@ -110,7 +116,13 @@ export default class Characters extends Component {
             </div>
           </div>
           <div className='col-md-8'>
-            {selected && 
+            {this.state.newCharacter &&
+              <NewCharacter
+                charactersService={this.props.charactersService}
+                onCharacterCreated={this.onCharacterCreated}
+                />
+            }
+            {selected && !this.state.newCharacter &&
               <div>
                 <CharacterDetails
                   selected={selected} 
@@ -119,14 +131,20 @@ export default class Characters extends Component {
                   />
               </div>
             }
-            {this.state.newCharacter &&
-              <NewCharacter
-                charactersService={this.props.charactersService}
-                />
-            }
           </div>
         </div>
       </main>
     )
   }
 }
+
+Characters.propTypes = {
+  charactersService: PropTypes.object.isRequired,
+  isSignedIn: PropTypes.func.isRequired,
+  toggleLogInModal: PropTypes.func.isRequired,
+  location: PropTypes.object.isRequired,
+  currentUser: PropTypes.object.isRequired,
+  history: PropTypes.object.isRequired,
+}
+
+export default Characters;

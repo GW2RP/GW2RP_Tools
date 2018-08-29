@@ -87,6 +87,26 @@ class CharactersService {
             throw err;
         });
     }
+
+    deleteOne = (id) => {
+        console.log("Deleting character...")
+        return Axios({
+            method: "DELETE",
+            baseURL: API_URL,
+            url: '/characters/' + id,
+            headers: {
+                'Authorization': `Bearer ${this.authService.getToken()}`,
+            },
+        }).then(response => {
+            this.characters = this.characters.filter(c => c._id !== id);
+            this.dispatch();
+            return;
+        }).catch(err => {
+            console.log("Could not delete character.")
+            console.error(err);
+            throw err;
+        });
+    }
 }
 
 export default new CharactersService();

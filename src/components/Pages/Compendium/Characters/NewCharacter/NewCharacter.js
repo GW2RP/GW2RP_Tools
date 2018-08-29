@@ -1,12 +1,17 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types';
+import { Redirect } from 'react-router-dom';
 
-export default class NewCharacter extends Component {
+class NewCharacter extends Component {
   constructor (props) {
     super(props);
 
     this.state = {
       name: '',
       tmpName: '',
+      description: '',
+      appearance: '',
+      history: '',
     };
   }
 
@@ -19,10 +24,52 @@ export default class NewCharacter extends Component {
   validateName = (event) => {
     event.preventDefault();
 
-    console.log(this.state.tmpName);
-
     this.setState({
       name: this.state.tmpName,
+    });
+  }
+
+  changeFields = (event) => {
+    event.preventDefault();
+
+    const name = event.target.name;
+    const value = event.target.value
+
+    this.setState({
+      [name]: value,
+    });
+  }
+
+  createCharacter = (event) => {
+    event.preventDefault();
+
+    this.setState({
+      creating: true,
+    });
+
+    const { name, description, appearance, history } = this.state;
+
+    this.props.charactersService.create({
+      name,
+      description,
+      appearance,
+      history,
+      tags: [],
+      sheet: {
+        characteristics: [],
+        skills: [],
+        feats: [],
+      },
+    }).then(character => {
+      this.setState({
+        creating: false,
+      });
+      this.props.onCharacterCreated(character._id);
+    }).catch(err => {
+      console.error(err);
+      this.setState({
+        creating: false,
+      });
     });
   }
 
@@ -34,9 +81,11 @@ export default class NewCharacter extends Component {
         <div>
           <p className='lead'>Qui suis-je ?</p>
           <form onSubmit={this.validateName}>
-            <input type='text' className='form-control' name='tmpName' value={this.state.tmpName} onChange={this.changeName} />
+            <div className='form-group'>
+              <input type='text' className='form-control' name='tmpName' value={this.state.tmpName} onChange={this.changeName} autoFocus required />
+            </div>
 
-            <button type='submit' className='btn btn-success'>Créer</button>
+            <button type='submit' className='btn btn-success'>Vérifier</button>
           </form>
         </div>
       )
@@ -45,7 +94,31 @@ export default class NewCharacter extends Component {
     return (
       <div>
         <h1>{name}</h1>
+        <hr/>
+        <form onSubmit={this.createCharacter}>
+          <div className='form-group'>
+            <label htmlFor='description'>Description</label>
+            <textarea rows="6" className='form-control' name='description' value={this.state.description} onChange={this.changeFields} placeholder='Qui est ce personnage ? Que fait-il ? Les autres peuvent-ils savoir certaines choses sur lui ?' autoFocus disabled={this.state.creating} required />
+          </div>
+          <div className='form-group'>
+            <label htmlFor='appearance'>Apparance</label>
+            <textarea rows="4" className='form-control' name='appearance' value={this.state.appearance} onChange={this.changeFields} placeholder='A quoi ressemble-t-il ? Quels sont ses signes distinctifs ?' disabled={this.state.creating} required />
+          </div>
+          <div className='form-group'>
+            <label htmlFor='history'>Histoire</label>
+            <textarea rows="6" className='form-control' name='history' value={this.state.history} onChange={this.changeFields} placeholder='Quelle est son histoire ?' disabled={this.state.creating} required />
+          </div>
+
+          <button type='submit' className='btn btn-success' disabled={this.state.creating} >Créer</button>
+        </form>
       </div>
-    )
+    ) 
   }
 }
+
+NewCharacter.propTypes = {
+  charactersService: PropTypes.object.isRequired,
+  onCharacterCreated: PropTypes.func.isRequired,
+}
+
+export default NewCharacter;

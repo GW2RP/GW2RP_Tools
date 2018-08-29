@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import { Link, Redirect } from 'react-router-dom';
 import { Edit3, Delete, Edit2, Edit } from 'react-feather';
 
 class CharacterDetails extends Component {
@@ -18,22 +19,17 @@ class CharacterDetails extends Component {
         });
     }
 
-    shouldComponentUpdate = (nextProps, nextState) => {
-        if (!this.state.character) {
-            return true;
-        }
+    fetchCharacter = (id) => {
+        this.props.charactersService.fetchOne(id).then(character => {
+            this.setState({ character });
+        });
+    }
 
-        if (nextProps.selected !== this.props.selected) {
-            this.setState({
-                character: null,
-            });
-    
-            this.props.charactersService.fetchOne(nextProps.selected).then(character => {
-                this.setState({ character });
-            });
-            return true;
+    shouldComponentUpdate = (nextProps, nextState) => {
+        if (!this.state.character || (nextProps.selected !== this.state.character._id)) {
+            this.fetchCharacter(nextProps.selected);
         }
-        return false;
+        return true;
     }
 
     editField = (event, field) => {
@@ -48,7 +44,22 @@ class CharacterDetails extends Component {
         event.preventDefault();
     }
 
+    deleteCharacter = (event) => {
+        event.preventDefault();
+        this.props.charactersService.deleteOne(this.state.character._id).then(() => {
+            this.setState({ deleted: true });
+        }).catch(err => {
+            console.error(err);
+        });
+    }
+
     render() {
+        if (this.state.deleted) {
+            return (
+                <Redirect to='/registre'/>
+            );
+        }
+        
         const { character } = this.state;
 
         if (!character) {
@@ -209,7 +220,7 @@ class CharacterDetails extends Component {
                         {editable &&
                             <div className='row justify-content-end'>
                                 <div className='col text-right'>
-                                    <button className='btn btn-danger'>Supprimer</button>
+                                    <button className='btn btn-danger' onClick={this.deleteCharacter} >Supprimer</button>
                                     {this.state.modificationsPending &&
                                         <button className='ml-2 btn btn-info'>Sauvegarder</button>
                                     }
@@ -222,5 +233,11 @@ class CharacterDetails extends Component {
         );
     }
 }
+
+CharacterDetails.propTypes = {
+    charactersService: PropTypes.object.isRequired,
+    selected: PropTypes.string.isRequired,
+    currentUser: PropTypes.object.isRequired,
+};
 
 export default CharacterDetails;

@@ -19,13 +19,15 @@ import authService from './services/Auth.Service';
 import rumoursService from './services/Rumours.Service';
 import eventsService from './services/Events.Service';
 import locationsService from './services/Locations.Service';
-import LocationsService from './services/Locations.Service';
 import charactersService from './services/Characters.Service';
 import Tools from './components/Pages/Tools/Tools';
 
+import './App.css';
+
 rumoursService.setAuth(authService);
 eventsService.setAuth(authService);
-LocationsService.setAuth(authService);
+locationsService.setAuth(authService);
+charactersService.setAuth(authService);
 
 class App extends Component {
 
@@ -107,7 +109,7 @@ class App extends Component {
     }
 
     return (
-      <div className="App h-100">
+      <div id="app">
         <Router>
           <div>
             <LogInModal isOpen={this.state.logInModal} toggle={this.toggleLogInModal} signIn={this.signIn} signUp={authService.signUp} />
