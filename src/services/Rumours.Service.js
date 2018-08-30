@@ -77,6 +77,26 @@ class RumoursService {
             throw err;
         });
     }
+
+    deleteOne = (id) => {
+        console.log("Deleting rumor...")
+        return Axios({
+            method: "DELETE",
+            baseURL: API_URL,
+            url: '/rumors/' + id,
+            headers: {
+                'Authorization': `Bearer ${this.authService.getToken()}`,
+            },
+        }).then(response => {
+            this.rumors = this.rumors.filter(r => r._id !== id);
+            this.dispatch();
+            return;
+        }).catch(err => {
+            console.log("Could not delete rumor.")
+            console.error(err);
+            throw err;
+        });
+    }
 }
 
 export default new RumoursService();

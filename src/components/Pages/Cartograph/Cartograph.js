@@ -122,14 +122,12 @@ class Cartograph extends Component {
       sideBar: true
     });
 
-    console.log(sideBarElement);
-
     let type;
     switch (sideBarElement.category) {
       case "location":
         type = "lieu";
         break;
-      case "rumour":
+      case "rumor":
         type = "rumeur";
         break;
       case "event":
@@ -153,6 +151,42 @@ class Cartograph extends Component {
     this.focus = focus;
   }
 
+  deleteElement = () => {
+    const { sideBarElement } = this.state;
+    if (!sideBarElement) {
+      return;
+    }
+
+    const service = this.getElementService(sideBarElement);
+    if (!service) {
+      return;
+    }
+
+    service.deleteOne(sideBarElement._id).then(_ => {
+      this.hideSideBar();
+      this.props.history.push(`/carte`);
+    }).catch(err => {
+      console.error(err);
+    });
+  }
+
+  refreshElement = () => {
+    
+  }
+
+  getElementService = (element) => {
+    switch (element.category) {
+      case 'event':
+        return this.props.eventsService;
+      case 'rumor':
+        return this.props.rumoursService;
+      case 'location':
+        return this.props.locationsService;
+      default:
+        return null;
+    }
+  }
+
   render() {
     return (
       <div>
@@ -164,7 +198,13 @@ class Cartograph extends Component {
           coord={this.state.coord}
           addMarker={this.addMarker}
         />
-        <SideBar isOpen={this.state.sideBar} element={this.state.sideBarElement} />
+        <SideBar
+          isOpen={this.state.sideBar}
+          element={this.state.sideBarElement}
+          deleteElement={this.deleteElement}
+          refreshElement={this.refreshElement}
+          editable={true}
+          />
         <Map
           rumours={this.state.rumours}
           events={this.state.events}

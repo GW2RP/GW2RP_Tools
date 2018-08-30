@@ -155,7 +155,8 @@ class Cartograph extends Component {
             
             let marker = L.marker(this.unproject([r.coordinates.x, r.coordinates.y]), { icon: icons.rumour }).bindPopup(popupContent);
             marker.on('click', (e) => {
-                this.props.showSideBar(r);
+                const toDisplay = Object.assign({ category: 'rumor' }, r)
+                this.props.showSideBar(toDisplay);
             });
             marker.addTo(this.map);
 
@@ -180,7 +181,8 @@ class Cartograph extends Component {
 
             let marker = L.marker(this.unproject([r.coordinates.x, r.coordinates.y]), { icon: icons[r.icon] }).bindPopup(popupContent);
             marker.on('click', (e) => {
-                this.props.showSideBar(r);
+                const toDisplay = Object.assign({ category: 'event' }, r)
+                this.props.showSideBar(toDisplay);
             });
             marker.addTo(this.map);
 
@@ -205,7 +207,8 @@ class Cartograph extends Component {
 
             let marker = L.marker(this.unproject([r.coordinates.x, r.coordinates.y]), { icon: icons[r.icon] }).bindPopup(popupContent);
             marker.on('click', (e) => {
-                this.props.showSideBar(r);
+                const toDisplay = Object.assign({ category: 'location' }, r)
+                this.props.showSideBar(toDisplay);
             });
             marker.addTo(this.map);
 

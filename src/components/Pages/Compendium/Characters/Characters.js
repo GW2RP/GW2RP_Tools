@@ -45,6 +45,11 @@ class Characters extends Component {
     this.props.history.push(`/registre/id/${id}`);
   }
 
+  abortNewCharacter = () => {
+    this.setState({ newCharacter: false });
+    this.props.history.push(`/registre`);
+  }
+
   render() {
     if (this.state.loading) {
       return (
@@ -120,6 +125,7 @@ class Characters extends Component {
               <NewCharacter
                 charactersService={this.props.charactersService}
                 onCharacterCreated={this.onCharacterCreated}
+                abortNewCharacter={this.abortNewCharacter}
                 />
             }
             {selected && !this.state.newCharacter &&

@@ -81,6 +81,25 @@ class LocationsService {
         });
     }
 
+    deleteOne = (id) => {
+        console.log("Deleting location...")
+        return Axios({
+            method: "DELETE",
+            baseURL: API_URL,
+            url: '/locations/' + id,
+            headers: {
+                'Authorization': `Bearer ${this.authService.getToken()}`,
+            },
+        }).then(response => {
+            this.locations = this.locations.filter(l => l._id !== id);
+            this.dispatch();
+            return;
+        }).catch(err => {
+            console.log("Could not delete location.")
+            console.error(err);
+            throw err;
+        });
+    }
 }
 
 export default new LocationsService();

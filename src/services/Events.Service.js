@@ -72,6 +72,26 @@ class EventsService {
             throw err;
         });
     }
+
+    deleteOne = (id) => {
+        console.log("Deleting event...")
+        return Axios({
+            method: "DELETE",
+            baseURL: API_URL,
+            url: '/events/' + id,
+            headers: {
+                'Authorization': `Bearer ${this.authService.getToken()}`,
+            },
+        }).then(response => {
+            this.events = this.events.filter(e => e._id !== id);
+            this.dispatch();
+            return;
+        }).catch(err => {
+            console.log("Could not delete event.")
+            console.error(err);
+            throw err;
+        });
+    }
 }
 
 export default new EventsService();

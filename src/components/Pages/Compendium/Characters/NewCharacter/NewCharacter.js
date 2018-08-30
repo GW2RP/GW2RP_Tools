@@ -80,6 +80,7 @@ class NewCharacter extends Component {
       return (
         <div>
           <p className='lead'>Qui suis-je ?</p>
+          <button className='btn btn-link text-danger' onClick={this.props.abortNewCharacter}>Annuler</button>
           <form onSubmit={this.validateName}>
             <div className='form-group'>
               <input type='text' className='form-control' name='tmpName' value={this.state.tmpName} onChange={this.changeName} autoFocus required />
@@ -94,6 +95,7 @@ class NewCharacter extends Component {
     return (
       <div>
         <h1>{name}</h1>
+        <button className='btn btn-link text-danger' onClick={this.props.abortNewCharacter}>Annuler</button>
         <hr/>
         <form onSubmit={this.createCharacter}>
           <div className='form-group'>
@@ -119,6 +121,7 @@ class NewCharacter extends Component {
 NewCharacter.propTypes = {
   charactersService: PropTypes.object.isRequired,
   onCharacterCreated: PropTypes.func.isRequired,
+  abortNewCharacter: PropTypes.func.isRequired,
 }
 
 export default NewCharacter;

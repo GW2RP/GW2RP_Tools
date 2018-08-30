@@ -76,13 +76,14 @@ class SideBar extends Component {
                             </div>
                         }
                         
-                        <div className="area pt-2 pb-2 actions">
-                            <h2 className="h5">Actions</h2>
-                            <Button color="secondary">Modifier</Button>
-                            <Button color="success">Prolonger</Button>
-                            <Button color="danger">Supprimer</Button>
-                        </div>
-
+                        {this.props.editable &&
+                            <div className="area pt-2 pb-2 actions">
+                                <h2 className="h5">Actions</h2>
+                                <Button color="secondary" className='ml-2'>Modifier</Button>
+                                <Button color="success" className='ml-2' onClick={this.props.refreshElement}>Prolonger</Button>
+                                <Button color="danger" className='ml-2' onClick={this.props.deleteElement}>Supprimer</Button>
+                            </div>
+                        }
                     </div>
                 </div>
             );
