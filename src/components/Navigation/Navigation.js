@@ -19,6 +19,9 @@ class Home extends Component {
               <NavLink exact className="nav-link" activeClassName="active" to="/carte">Cartographe</NavLink>
             </li>
             <li className="nav-item">
+              <NavLink exact className="nav-link" activeClassName="active" to="/contrats">Contrats</NavLink>
+            </li>
+            <li className="nav-item">
               <NavLink className="nav-link" activeClassName="active" to="/registre">Personnages</NavLink>
             </li>
             <li className="nav-item">

@@ -20,14 +20,17 @@ import rumoursService from './services/Rumours.Service';
 import eventsService from './services/Events.Service';
 import locationsService from './services/Locations.Service';
 import charactersService from './services/Characters.Service';
+import contractsService from './services/Contracts.Service';
 import Tools from './components/Pages/Tools/Tools';
 
 import './App.css';
+import Board from './components/Pages/Board/Board';
 
 rumoursService.setAuth(authService);
 eventsService.setAuth(authService);
 locationsService.setAuth(authService);
 charactersService.setAuth(authService);
+contractsService.setAuth(authService);
 
 class App extends Component {
 
@@ -141,6 +144,12 @@ class App extends Component {
                   toggleLogInModal={this.toggleLogInModal}
                   location={props.location}
                   history={props.history}
+                />
+              )} />
+              <Route path="/contrats" render={(props) => (
+                <Board 
+                  contractsService={contractsService}
+                  signedIn={authService.isSignedIn()}
                 />
               )} />
               <Route path="/guildes" render={(props) => (
