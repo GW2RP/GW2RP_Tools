@@ -45,7 +45,28 @@ class logInModal extends Component {
         });
     }
 
-    
+    sendValidationMail = () => {
+        if (!this.state.username) {
+            this.setState({
+                loginError: {
+                    id: 'USER_NOT_VALIDATED',
+                    message: 'User not validated.',
+                }
+            });
+            return;
+        }
+
+        this.props.sendValidationMail(this.state.username).then(() => {
+            this.setState({
+                loginError: {
+                    id: 'VALIDATION_SENT',
+                    message: 'Validation sent.',
+                },
+            });
+        }).catch(err => {
+            console.error(err);
+        });
+    }
 
     render() {
 
@@ -75,6 +96,12 @@ class logInModal extends Component {
                     break;
                 case "WRONG_CREDENTIALS":
                     error = "Le mot de passe et le nom d'utilisateur ne correspondent pas.";
+                    break;
+                case 'USER_NOT_VALIDATED':
+                    error = <span>Votre compte n'est actuellement pas validé. Vérifiez vos email ou <button className='btn btn-link' onClick={this.sendValidationMail}>renvoyez le mail de confirmation</button> après avoir renseigné votre nom d'utilisateur ci-dessous.</span>
+                    break;
+                case 'VALIDATION_SENT':
+                    error = <span>Nous avons envoyé un mail de confirmation. Vérifiez vos spams si vous ne l'avez pas reçu, ou <button className='btn btn-link' onClick={this.sendValidationMail}>renvoyez-le</button> après avoir renseigné votre nom d'utilisateur ci-dessous.</span>
                     break;
                 default:
                     error = "Le serveur dans les Brumes est inaccessible."

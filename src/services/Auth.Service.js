@@ -122,6 +122,21 @@ class AuthService {
             throw { message: "Nous n'avons pas pu contacter le serveur dans les Brumes.", id: "NETWORK_ERROR" };
         });
     }
+
+    sendValidationMail(username) {
+        return Axios({
+            method: "POST",
+            baseURL: API_URL,
+            url: '/validate/' + username,
+        }).then(response => {
+            return;
+        }).catch(err => {
+            if (err.response && err.response.data) {
+                throw { message: err.response.data.error.message || "Nous n'avons pas pu envoyer le mail de validation.", id: err.response.data.error.id, details: err.response.data.error.details };
+            }
+            throw { message: "Nous n'avons pas pu contacter le serveur dans les Brumes.", id: "NETWORK_ERROR" };
+        });
+    }
 }
 
 export default new AuthService();
