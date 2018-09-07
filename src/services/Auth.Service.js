@@ -80,24 +80,20 @@ class AuthService {
             return Promise.resolve({ success: false, user: {}});
         }
 
-        return Promise.resolve({ success: true, user: { username: this.username, admin: this.admin }});
+        try {
+            const data = JSON.parse(atob(token.split(".")[1]));
 
-        return Axios({
-            method: "POST",
-            baseURL: API_URL,
-            url: '/me',
-            headers: {
-                "Authorization": "Bearer " + token
-            },
-            data: {
-                id: this.user_id,
-                token
+            const expiration = new Date();
+
+            expiration.setMilliseconds(data.exp);
+            
+            if (expiration <= new Date()) {
+                return Promise.resolve({ success: false, user: {} });
             }
-        })
-        .then(res => {
-            return res.data.success
-        })
-        .catch(() => false);
+            return Promise.resolve({ success: true, user: { username: this.username, admin: this.admin }});
+        } catch (e) {
+            return Promise.resolve({ success: false, user: {} });
+        }
     }
 
     onLogOut(listener) {
