@@ -49,7 +49,7 @@ export default class Contract extends Component {
                 <div className="card-body">
                     <div className="d-flex justify-content-between">
                         <h5 className='card-title flex-grow-1'>{contract.title}</h5>
-                        {canEdit && <button className='btn btn-link text-muted' title='Editer'><Edit2 /></button>}
+                        {canEdit && <button className='btn btn-link text-muted' title='Editer' onClick={() => this.props.editContract(this.props.contract)}><Edit2 /></button>}
                         {canEdit && <button className='btn btn-link text-danger' title='Supprimer' onClick={this.deleteContract}><X /></button>}
                     </div>
                     
