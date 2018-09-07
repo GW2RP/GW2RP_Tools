@@ -128,12 +128,37 @@ class ContractsService {
             }
             return;
         }).catch(err => {
-            console.log("Could not delete contract.")
+            console.log("Could not accept contract.")
             console.error(err);
             throw err;
         });
     }
 
+    declineContract = (id) => {
+        console.log("Declining contract...")
+        return Axios({
+            method: "POST",
+            baseURL: API_URL,
+            url: '/contracts/' + id + '/decline',
+            headers: {
+                'Authorization': `Bearer ${this.authService.getToken()}`,
+            },
+        }).then(response => {
+            const index = this.contracts.findIndex(c => c._id === id);
+            if (index > -1) {
+                return this.fetchOne(id).then(contract => {
+                    this.contracts[index] = contract;
+                    this.dispatch();
+                    return;
+                });
+            }
+            return;
+        }).catch(err => {
+            console.log("Could not decline contract.")
+            console.error(err);
+            throw err;
+        });
+    }
 }
 
 export default new ContractsService();
