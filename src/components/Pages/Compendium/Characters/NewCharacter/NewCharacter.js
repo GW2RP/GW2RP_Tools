@@ -12,6 +12,7 @@ class NewCharacter extends Component {
       description: '',
       appearance: '',
       history: '',
+      error: null,
     };
   }
 
@@ -63,12 +64,13 @@ class NewCharacter extends Component {
     }).then(character => {
       this.setState({
         creating: false,
+        error: null,
       });
       this.props.onCharacterCreated(character._id);
     }).catch(err => {
-      console.error(err);
       this.setState({
         creating: false,
+        error: err.id,
       });
     });
   }
@@ -92,6 +94,17 @@ class NewCharacter extends Component {
       )
     }
 
+    let error;
+    if (this.state.error) {
+      switch (this.state.error) {
+        case 'CHARACTER_NAME_USED':
+          error = <p className='alert alert-danger'>Ce nom de personnage est déjà utilisé.</p>;
+          break;
+        default:
+          error = <p className='alert alert-danger'>Une erreur inconnue est survenue (encore un coup des asuras...).</p>;
+      }
+    }
+
     return (
       <div>
         <h1>{name}</h1>
@@ -111,6 +124,7 @@ class NewCharacter extends Component {
             <textarea rows="6" className='form-control' name='history' value={this.state.history} onChange={this.changeFields} placeholder='Quelle est son histoire ?' disabled={this.state.creating} required />
           </div>
 
+          {error}
           <button type='submit' className='btn btn-success' disabled={this.state.creating} >Créer</button>
         </form>
       </div>

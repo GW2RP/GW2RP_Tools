@@ -45,7 +45,10 @@ class CharactersService {
         }).catch(err => {
             console.log("Could not fetch characters.")
             console.error(err);
-            throw err;
+            if (err.response && err.response.data) {
+                throw { message: err.response.data.error.message || "Nous n'avons pas pu vous enregistrer.", id: err.response.data.error.id, details: err.response.data.error.details };
+            }
+            throw { message: "Nous n'avons pas pu contacter le serveur dans les Brumes.", id: "NETWORK_ERROR" };
         });
     }
 
@@ -60,7 +63,10 @@ class CharactersService {
         }).catch(err => {
             console.log("Could not fetch character.")
             console.error(err);
-            throw err;
+            if (err.response && err.response.data) {
+                throw { message: err.response.data.error.message || "Nous n'avons pas pu vous enregistrer.", id: err.response.data.error.id, details: err.response.data.error.details };
+            }
+            throw { message: "Nous n'avons pas pu contacter le serveur dans les Brumes.", id: "NETWORK_ERROR" };
         });
     }
 
@@ -84,7 +90,10 @@ class CharactersService {
         }).catch(err => {
             console.log('Could not create character.');
             console.error(err);
-            throw err;
+            if (err.response && err.response.data) {
+                throw { message: err.response.data.error.message || "Nous n'avons pas pu vous enregistrer.", id: err.response.data.error.id, details: err.response.data.error.details };
+            }
+            throw { message: "Nous n'avons pas pu contacter le serveur dans les Brumes.", id: "NETWORK_ERROR" };
         });
     }
 
@@ -104,7 +113,10 @@ class CharactersService {
         }).catch(err => {
             console.log("Could not delete character.")
             console.error(err);
-            throw err;
+            if (err.response && err.response.data) {
+                throw { message: err.response.data.error.message || "Nous n'avons pas pu vous enregistrer.", id: err.response.data.error.id, details: err.response.data.error.details };
+            }
+            throw { message: "Nous n'avons pas pu contacter le serveur dans les Brumes.", id: "NETWORK_ERROR" };
         });
     }
 }
