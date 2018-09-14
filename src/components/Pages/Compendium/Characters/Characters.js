@@ -7,6 +7,8 @@ import Loader from '../../../Commons/Loader';
 import CharacterDetails from './CharacterDetails';
 import NewCharacter from './NewCharacter';
 
+import BgPureWood from '../../../../commons/images/bg_purewood.png';
+
 class Characters extends Component {
   constructor(props) {
     super(props);
@@ -92,8 +94,8 @@ class Characters extends Component {
     }
 
     return (
-      <main role="main" className="container-fluid h-100">
-        <div className='row h-100'>
+      <main role="main" className="container-fluid" style={{ background: `url(${BgPureWood})`, height: '94vh' }}>
+        <div className='row'>
           <div className='col-md-4 d-none d-md-block border-right' style={{ maxWidth: '300px' }}>
             <div className='row justify-content-between align-items-center'>
               <div className='col'>
@@ -129,13 +131,11 @@ class Characters extends Component {
                 />
             }
             {selected && !this.state.newCharacter &&
-              <div>
-                <CharacterDetails
-                  selected={selected} 
-                  currentUser={this.props.currentUser}
-                  charactersService={this.props.charactersService}
-                  />
-              </div>
+              <CharacterDetails
+                selected={selected} 
+                currentUser={this.props.currentUser}
+                charactersService={this.props.charactersService}
+              />
             }
           </div>
         </div>

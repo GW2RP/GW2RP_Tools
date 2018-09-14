@@ -119,6 +119,41 @@ class CharactersService {
             throw { message: "Nous n'avons pas pu contacter le serveur dans les Brumes.", id: "NETWORK_ERROR" };
         });
     }
+
+    update = (id, character) => {
+        console.log('Updating a Character...');
+        return Axios({
+            method: 'PUT',
+            baseURL: API_URL,
+            url: '/characters/' + id,
+            headers: {
+                'Authorization': `Bearer ${this.authService.getToken()}`,
+            },
+            data: {
+                character,
+            },
+        }).then(response => {
+            console.log('Character updated.');
+            
+            const index = this.characters.findIndex(c => c._id === id);
+            if (index > -1) {
+                return this.fetchOne(id).then(character => {
+                this.characters[index] = character;
+                this.dispatch();
+                return response.data.character;
+                });
+            }
+
+            return response.data.character;
+        }).catch(err => {
+            console.log('Could not update character.');
+            console.error(err);
+            if (err.response && err.response.data) {
+                throw { message: err.response.data.error.message || "Nous n'avons pas pu vous enregistrer.", id: err.response.data.error.id, details: err.response.data.error.details };
+            }
+            throw { message: "Nous n'avons pas pu contacter le serveur dans les Brumes.", id: "NETWORK_ERROR" };
+        });
+    }
 }
 
 export default new CharactersService();
