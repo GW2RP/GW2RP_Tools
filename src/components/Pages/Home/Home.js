@@ -63,7 +63,7 @@ class Home extends Component {
     const { rumors, events, today } = this.state;
 
     return (
-      <main role="main" className="container-fluid" style={{ background: `url(${BgPureWood})` }}>
+      <main role="main" className="container-fluid" style={{ background: `url(${BgPureWood})`, minHeight: '94vh' }}>
         <Row className="justify-content-center p-2">  
           <Col>
             <p class="lead">Attention : les données sur le site de test seront effacées.</p>
