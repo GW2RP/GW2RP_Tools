@@ -9,6 +9,8 @@ import { formatText } from '../../../utils/formatter';
 
 import { API_URL } from '../../../configuration/Config';
 
+import BgPureWood from '../../../commons/images/bg_purewood.png';
+
 class Home extends Component {
 
   constructor(props) {
@@ -61,8 +63,8 @@ class Home extends Component {
     const { rumors, events, today } = this.state;
 
     return (
-      <main role="main" className="container-fluid">
-        <Row className="justify-content-center p-2">
+      <main role="main" className="container-fluid" style={{ background: `url(${BgPureWood})` }}>
+        <Row className="justify-content-center p-2">  
           <Col>
             <p class="lead">Attention : les données sur le site de test seront effacées.</p>
           </Col>

@@ -110,28 +110,24 @@ export default class Board extends Component {
     }
 
     return (
-      <div className='container-fluid pt-2' style={{ background: `url(${Woodbackground})`, height: '100%' }}>
+      <div className='container-fluid pt-2' style={{ background: `url(${Woodbackground})`, minHeight: '94%' }}>
         <EditContractModal
           isOpen={this.state.editModal}
           toggle={this.toggleEditModal}
           createContract={this.createContract}
           updateContract={this.updateContract}
           contract={this.state.editedContract} />
-        <div className='d-flex'>
-          <div className='flex-grow-1'>
+        <div className='row'>
+          <div className='col'>
             <h1>Tableau des Contrats</h1>
           </div>
-          {this.props.signedIn && [
-            <div className='pl-2'>
-              <button className={`btn ${this.state.filterAcceptedContracts ? 'btn-light' : `btn-outline-light`}`} onClick={this.filterAcceptedContracts}>Contrats acceptés</button>
-            </div>,
-            <div className='pl-2'>
-              <button className={`btn ${this.state.filterUserContracts ? 'btn-dark' : `btn-outline-dark`}`} onClick={this.filterUserContracts} >Mes Contrats</button>
-            </div>,
-            <div className='pl-2'>
-              <button className='btn btn-success' onClick={this.toggleEditModal} >Nouveau Contrat</button>
+          {this.props.signedIn &&
+            <div className='col text-right'>
+                <button className={`mr-2 btn ${this.state.filterAcceptedContracts ? 'btn-light' : `btn-outline-light`}`} onClick={this.filterAcceptedContracts}>Contrats acceptés</button>
+                <button className={`mr-2 btn ${this.state.filterUserContracts ? 'btn-dark' : `btn-outline-dark`}`} onClick={this.filterUserContracts} >Mes Contrats</button>
+                <button className='btn btn-success' onClick={this.toggleEditModal} >Nouveau Contrat</button>
             </div>
-          ]}
+          }
         </div>
         <div className={`card-columns ${this.state.columnClass}`}>
           {contractsToDisplay.map((contract, index) =>
