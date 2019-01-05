@@ -22,7 +22,7 @@ import locationsService from './services/Locations.Service';
 import charactersService from './services/Characters.Service';
 import contractsService from './services/Contracts.Service';
 import Tools from './components/Pages/Tools/Tools';
-
+import Kalendar from './components/Pages/Kalendar';
 import './App.css';
 import Board from './components/Pages/Board/Board';
 
@@ -156,6 +156,9 @@ class App extends Component {
                   contractsService={contractsService}
                   signedIn={authService.isSignedIn()}
                 />
+              )} />
+              <Route path="/calendrier" render={(props) => (
+                <Kalendar />
               )} />
               <Route path="/guildes" render={(props) => (
                 <Guilds />

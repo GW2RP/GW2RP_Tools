@@ -132,7 +132,7 @@ class CharacterDetails extends Component {
 
         const { name, owner, tags, description, appearance, history, sheet } = character;
 
-        const editable = (this.props.currentUser.username.toLowerCase() === owner.username.toLowerCase()) || this.props.currentUser.admin;
+        const editable = this.props.currentUser.username && ((this.props.currentUser.username.toLowerCase() === owner.username.toLowerCase()) || this.props.currentUser.admin);
 
         return (
             <div className='card' style={{ height: '94vh', overflowY: 'scroll'}}>
