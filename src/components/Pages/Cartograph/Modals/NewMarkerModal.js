@@ -107,7 +107,7 @@ class NewMarkerModal extends Component {
         }
 
         this.props.addMarker(this.state.tab, marker);
-    }
+    };
 
     handleInputChange = (event) => {
         const target = event.target;

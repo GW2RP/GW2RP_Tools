@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { withRouter } from "react-router-dom";
 
 import { Col, Row, Card, CardBody, CardTitle, ListGroup, ListGroupItem, CardText, CardLink, CardSubtitle } from 'reactstrap';
 
@@ -18,8 +19,36 @@ class Kalendar extends Component {
       today,
       year: today.getFullYear(),
       month: today.getMonth(),
+      events: [],
     };
   }
+
+  componentDidMount() {
+    this.matchPathParams();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const { match: { params } } = this.props;
+    const { year, month } = this.state;
+
+    if (+params.year !== +year || +params.month !== +(month + 1)) {
+      this.matchPathParams();
+    }
+  }
+
+  matchPathParams = () => {
+    const { match: { params }, history } = this.props;
+    const { today } = this.state;
+
+    if (!params.year || isNaN(params.year) || !params.month || isNaN(params.month) || params.month < 1 || params.month > 12) {
+      history.push(`/calendrier/${today.getFullYear()}/${today.getMonth() + 1}`)
+    } else {
+      this.setState({
+        year: params.year,
+        month: params.month - 1,
+      });
+    }
+  };
 
   getDate = (_month, _year) => {
     const today = new Date();
@@ -53,31 +82,31 @@ class Kalendar extends Component {
   };
 
   goToday = () => {
+    const { history } = this.props;
     const { today } = this.state;
 
-    this.setState({
-      year: today.getFullYear(),
-      month: today.getMonth(),
-    });
+    history.push(`/calendrier/${today.getFullYear()}/${today.getMonth() + 1}`);
   };
 
   goPrevious = () => {
+    const { history } = this.props;
     const { year, month } = this.state;
 
     if (month === 0) {
-      this.setState({ year: year - 1, month: 11 });
+      history.push(`/calendrier/${year - 1}/${12}`);
     } else {
-      this.setState({ month: month - 1 });
+      history.push(`/calendrier/${year}/${month}`);
     }
   };
 
   goNext = () => {
+    const { history } = this.props;
     const { year, month } = this.state;
 
     if (month === 11) {
-      this.setState({ year: year + 1, month: 0 });
+      history.push(`/calendrier/${year + 1}/${1}`);
     } else {
-      this.setState({ month: month + 1 });
+      history.push(`/calendrier/${year}/${month + 2}`);
     }
   };
 
@@ -174,4 +203,4 @@ class Kalendar extends Component {
   }
 }
 
-export default Kalendar;
+export default withRouter(Kalendar);
