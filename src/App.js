@@ -157,10 +157,14 @@ class App extends Component {
                   signedIn={authService.isSignedIn()}
                 />
               )} />
-              <Route path="/calendrier/:year/:month" render={(props) => (
-                <Kalendar
-                  eventService={eventsService}
-                />
+              <Route path={["/calendrier/:year/:month", "/calendrier"]} render={(props) => (
+                props.match.params.year && props.match.params.month ? (
+                  <Kalendar
+                    eventService={eventsService}
+                  />
+                ) : (
+                  <Redirect to="/calendrier/0/0" />
+                )
               )} />
               <Route path="/guildes" render={(props) => (
                 <Guilds />

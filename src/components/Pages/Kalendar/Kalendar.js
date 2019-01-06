@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { withRouter } from "react-router-dom";
+import { withRouter, Link } from "react-router-dom";
 
 import { Col, Row, Card, CardBody, CardTitle, ListGroup, ListGroupItem, CardText, CardLink, CardSubtitle } from 'reactstrap';
 
@@ -17,8 +17,8 @@ class Kalendar extends Component {
 
     this.state = {
       today,
-      year: today.getFullYear(),
-      month: today.getMonth(),
+      year: null,
+      month: null,
       events: [],
     };
   }
@@ -36,7 +36,7 @@ class Kalendar extends Component {
     }
   }
 
-  matchPathParams = () => {
+  matchPathParams = async () => {
     const { match: { params }, history } = this.props;
     const { today } = this.state;
 
@@ -46,8 +46,27 @@ class Kalendar extends Component {
       this.setState({
         year: params.year,
         month: params.month - 1,
-      });
+      }, this.loadEvents);
     }
+  };
+
+  loadEvents = async () => {
+    const { eventService } = this.props;
+    const { year, month } = this.state;
+
+    let events = await eventService.getAll();
+    const days = [...Array(this.daysInMonth(month, year)).keys()].map(day => day + 1);
+
+    events = events.filter(event => new Date(event.dates.start) > new Date(year, month, 1) && new Date(event.dates.end) < new Date(year, month + 1, 0));
+    events = events.map(event => {
+      event.dates.startDay = new Date(event.dates.start).getDate();
+      event.dates.endDay = new Date(event.dates.end).getDate();
+      event.dates.days = days.slice(event.dates.startDay - 1, event.dates.endDay);
+
+      return event;
+    });
+
+    this.setState({ events });
   };
 
   getDate = (_month, _year) => {
@@ -111,7 +130,7 @@ class Kalendar extends Component {
   };
 
   render() {
-    const { today, year, month } = this.state;
+    const { today, year, month, events } = this.state;
 
     const daysInPreviousMonth = this.daysInMonth(month - 1, year);
     const days = this.daysInMonth(month, year);
@@ -166,6 +185,9 @@ class Kalendar extends Component {
                     {[...Array(7 - firstDay).keys()].map(day => (
                       <div className="col day" key={day}>
                         {day + 1}
+                        {events.filter(event => event.dates.days.includes(day + 1)).map(event => (
+                          <a href="#" key={event._id} className="badge badge-primary">{new Date(event.dates.start).getHours()}:{new Date(event.dates.start).getMinutes()} {event.title}</a>
+                        ))}
                       </div>
                     ))}
                   </div>
@@ -174,7 +196,18 @@ class Kalendar extends Component {
                   <div className="row week" key={week}>
                     {[...Array(7).keys()].map(day => (
                       <div className="col day" key={day}>
-                        {7 - (firstDay - 1) + 7 * week + day}
+                        <Row>
+                          <Col>
+                            {7 - (firstDay - 1) + 7 * week + day}
+                          </Col>
+                        </Row>
+                        {events.filter(event => event.dates.days.includes(7 - (firstDay - 1) + 7 * week + day)).map(event => (
+                          <Row key={event._id}>
+                            <Col>
+                              <Link to={`/carte/event/${event._id}`} className="event">{new Date(event.dates.start).getHours()}:{new Date(event.dates.start).getMinutes()} {event.title}</Link>
+                            </Col>
+                          </Row>
+                        ))}
                       </div>
                     ))}
                   </div>
@@ -184,7 +217,18 @@ class Kalendar extends Component {
                     {/* Last, incomplete row */}
                     {[...Array(lastDay + 1).keys()].map(day => (
                       <div className="col day" key={day}>
-                        {days - lastDay + day}
+                        <Row>
+                          <Col>
+                            {days - lastDay + day}
+                          </Col>
+                        </Row>
+                        {events.filter(event => event.dates.days.includes(days - lastDay + day)).map(event => (
+                          <Row key={event._id}>
+                            <Col>
+                              <Link to={`/carte/event/${event._id}`} className="badge badge-primary">{new Date(event.dates.start).getHours()}:{new Date(event.dates.start).getMinutes()} {event.title}</Link>
+                            </Col>
+                          </Row>
+                        ))}
                       </div>
                     ))}
                     {[...Array(7 - (lastDay + 1)).keys()].map(day => (

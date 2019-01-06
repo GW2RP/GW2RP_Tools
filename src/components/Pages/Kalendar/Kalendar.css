@@ -1,5 +1,6 @@
 .day {
     border: #dadce0 1px solid;
+    overflow-y: scroll;
 }
 
 .week {
