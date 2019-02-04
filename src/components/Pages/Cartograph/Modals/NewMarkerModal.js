@@ -55,7 +55,7 @@ class NewMarkerModal extends Component {
                 contact: '',
                 site: '',
                 types: [],
-                icon: '',
+                icon: 'other',
                 opening_hours: '',
             },
             event: {
@@ -64,8 +64,8 @@ class NewMarkerModal extends Component {
                 difficulty: "normal",
                 contact: "",
                 site: "",
-                types: [],
-                icon: "",
+                types: ['other'],
+                icon: "generic",
                 start_date: "",
                 start_hour: '',
                 end_date: "",
@@ -234,7 +234,7 @@ class NewMarkerModal extends Component {
                                             <div className="clearfix">
                                                 <div className="float-right">
                                                     <Button type="submit" color="primary">Ajouter</Button>
-                                                    <Button className="ml-2" type="button" color="secondary">Annuler</Button>
+                                                    <Button className="ml-2" type="button" color="secondary" onClick={this.props.toggle}>Annuler</Button>
                                                 </div>
                                             </div>
                                         </Col>
@@ -348,7 +348,7 @@ class NewMarkerModal extends Component {
                                             <div className="clearfix">
                                         <div className="float-right">
                                             <Button type="submit" color="primary">Ajouter</Button>
-                                            <Button className="ml-2" type="button" color="secondary">Annuler</Button>
+                                            <Button className="ml-2" type="button" color="secondary" onClick={this.props.toggle}>Annuler</Button>
                                         </div>
                                     </div>
                                         </Col>
@@ -387,7 +387,7 @@ class NewMarkerModal extends Component {
                                     <div className="clearfix">
                                         <div className="float-right">
                                             <Button type="submit" color="primary">Ajouter</Button>
-                                            <Button className="ml-2" type="button" color="secondary">Annuler</Button>
+                                            <Button className="ml-2" type="button" color="secondary" onClick={this.props.toggle}>Annuler</Button>
                                         </div>
                                     </div>
                                 </Form>

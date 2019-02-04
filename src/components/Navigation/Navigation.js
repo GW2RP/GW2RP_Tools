@@ -31,7 +31,7 @@ class Home extends Component {
               <NavLink className="nav-link" activeClassName="active" to="/guildes">Guildes</NavLink>
             </li>
             <li className='nav-item dropdown'>
-              <NavLink className="nav-link dropdown-toggle" activeClassName='active' to='/outils' role='button' data-toggle="dropdown">Outils</NavLink>
+              <div className="nav-link dropdown-toggle" role='button' data-toggle="dropdown">Outils</div>
               <div className='dropdown-menu' aria-labelledby='toolsDropdown'>
                 <NavLink className='dropdown-item' to='/outils' exact>Tous les outils</NavLink>
                 <div className="dropdown-divider"></div>
